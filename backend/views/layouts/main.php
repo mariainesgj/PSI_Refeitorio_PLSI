@@ -31,11 +31,16 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
+            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top'
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Cozinhas', 'url' => ['/cozinha/index']],
+        ['label' => 'Ementas', 'url' => ['/ementa/index']],
+        ['label' => 'Pratos', 'url' => ['/prato/index']],
+        ['label' => 'Senhas', 'url' => ['/senha/index']],
+        ['label' => 'Faturas', 'url' => ['/fatura/index']],
+        ['label' => 'Movimentos', 'url' => ['/movimento/index']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
@@ -50,7 +55,7 @@ AppAsset::register($this);
         echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout text-decoration-none']
+                ['class' => 'btn btn-link logout text-decoration-none', 'style' => 'color: white;']
             )
             . Html::endForm();
     }
