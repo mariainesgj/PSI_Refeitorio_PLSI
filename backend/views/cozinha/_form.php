@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="cozinha-form">
     <div class="container mt-6">
-        <div class="row">
+        <div class="row d-flex align-items-center">
             <div class="col-md-6">
                 <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Definir cozinha</h4>
                 <?php $form = ActiveForm::begin(['options' => ['class' => 'needs-validation', 'novalidate' => true]]); ?>

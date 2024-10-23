@@ -32,7 +32,7 @@ class Prato extends \yii\db\ActiveRecord
         return [
             [['designacao', 'componentes'], 'required'],
             [['tipo'], 'string'],
-            [['designacao', 'componentes'], 'string', 'max' => 50],
+            [['designacao', 'componentes'], 'string', 'max' => 200],
         ];
     }
 
