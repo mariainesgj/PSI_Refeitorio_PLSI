@@ -12,5 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="ementa-create">
     <?= $this->render('_form', [
         'model' => $model,
+        'cozinhasList' => $cozinhasList,
+        'pratosNormaisList' => $pratosNormaisList,
+        'pratosVegetarianosList' => $pratosVegetarianosList,
+        'sopasList' => $sopasList
     ]) ?>
 </div>

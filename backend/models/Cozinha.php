@@ -13,7 +13,7 @@ use Yii;
  * @property string $designacao
  * @property string $telemovel
  *
- * @property Ementas[] $ementas
+ * @property Ementa[] $ementas
  */
 class Cozinha extends \yii\db\ActiveRecord
 {

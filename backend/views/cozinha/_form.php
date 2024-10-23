@@ -16,8 +16,8 @@ use yii\widgets\ActiveForm;
 
                 <div class="mb-3">
                     <?= $form->field($model, 'responsavel')
-                        ->textInput(['maxlength' => true, 'class' => 'form-control'])
-                        ->label('Nome do Responsável:', ['class' => 'form-label'])
+                    ->dropDownList($funcionariosList, ['prompt' => 'Selecione um funcionário', 'class' => 'form-control dropdown-with-arrow'])
+                        ->label('Responsável:', ['class' => 'form-label'])
                     ?>
                 </div>
 

@@ -14,8 +14,8 @@ use Yii;
  * @property int $sopa
  * @property int $cozinha_id
  *
- * @property Cozinhas $cozinha
- * @property Senhas[] $senhas
+ * @property Cozinha $cozinha
+ * @property Senha[] $senhas
  */
 class Ementa extends \yii\db\ActiveRecord
 {
@@ -36,7 +36,7 @@ class Ementa extends \yii\db\ActiveRecord
             [['data', 'prato_normal', 'prato_vegetariano', 'sopa', 'cozinha_id'], 'required'],
             [['data'], 'safe'],
             [['prato_normal', 'prato_vegetariano', 'sopa', 'cozinha_id'], 'integer'],
-            [['cozinha_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cozinhas::class, 'targetAttribute' => ['cozinha_id' => 'id']],
+            [['cozinha_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cozinha::class, 'targetAttribute' => ['cozinha_id' => 'id']],
         ];
     }
 
@@ -62,7 +62,7 @@ class Ementa extends \yii\db\ActiveRecord
      */
     public function getCozinha()
     {
-        return $this->hasOne(Cozinhas::class, ['id' => 'cozinha_id']);
+        return $this->hasOne(Cozinha::class, ['id' => 'cozinha_id']);
     }
 
     /**
@@ -72,6 +72,6 @@ class Ementa extends \yii\db\ActiveRecord
      */
     public function getSenhas()
     {
-        return $this->hasMany(Senhas::class, ['ementa_id' => 'id']);
+        return $this->hasMany(Senha::class, ['ementa_id' => 'id']);
     }
 }

@@ -17,35 +17,36 @@ use yii\widgets\ActiveForm;
 
                 <div class="mb-3">
                     <?= $form->field($model, 'data')
-                        ->textInput(['maxlength' => true, 'class' => 'form-control'])
+                        ->input('date', ['class' => 'form-control'])
                         ->label('Data:', ['class' => 'form-label'])
                     ?>
                 </div>
 
                 <div class="mb-3">
                     <?= $form->field($model, 'prato_normal')
-                        ->textInput(['maxlength' => false, 'class' => 'form-control'])
+                        ->dropDownList($pratosNormaisList, ['prompt' => 'Selecione um prato normal.', 'class' => 'form-control dropdown-with-arrow'])
                         ->label('Prato Normal:', ['class' => 'form-label'])
                     ?>
                 </div>
 
                 <div class="mb-3">
                     <?= $form->field($model, 'prato_vegetariano')
-                        ->textInput(['maxlength' => true, 'class' => 'form-control'])
+                        ->dropDownList($pratosVegetarianosList, ['prompt' => 'Selecione um prato vegetariano.', 'class' => 'form-control dropdown-with-arrow'])
                         ->label('Prato Vegetariano:', ['class' => 'form-label'])
                     ?>
                 </div>
 
+
                 <div class="mb-3">
                     <?= $form->field($model, 'sopa')
-                        ->textInput(['maxlength' => true, 'class' => 'form-control'])
+                        ->dropDownList($sopasList, ['prompt' => 'Selecione uma sopa.', 'class' => 'form-control dropdown-with-arrow'])
                         ->label('Sopa:', ['class' => 'form-label'])
                     ?>
                 </div>
 
                 <div class="mb-3">
                     <?= $form->field($model, 'cozinha_id')
-                        ->textInput(['maxlength' => true, 'class' => 'form-control'])
+                        ->dropDownList($cozinhasList, ['prompt' => 'Selecione uma cozinha.', 'class' => 'form-control dropdown-with-arrow'])
                         ->label('Cozinha associada:', ['class' => 'form-label'])
                     ?>
                 </div>
@@ -70,5 +71,15 @@ use yii\widgets\ActiveForm;
         border-radius: 5px;
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-with-arrow {
+        position: relative;
+        background: #fff;
+        padding-right: 30px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2350A9B4'%3E%3Cpath d='M5.23 7.21a.75.75 0 011.04-.02L10 10.39l3.73-3.2a.75.75 0 111.02 1.1l-4.25 3.65a.75.75 0 01-1.02 0L5.23 8.3a.75.75 0 01-.02-1.08z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px;
     }
 </style>

@@ -3,7 +3,9 @@
 namespace backend\controllers;
 
 use app\models\Cozinha;
+use app\models\Profile;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -79,8 +81,21 @@ class CozinhaController extends Controller
     {
         $model = new Cozinha();
 
+        $funcionarios = Profile::find()->where(['role' => 'funcionario'])->all();
+        $funcionariosList = \yii\helpers\ArrayHelper::map($funcionarios, 'id', 'name');
+
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            $data = $this->request->post();
+            $model->load($data);
+
+            if (isset($data['Cozinha']['responsavel'])) {
+                $responsavelId = $data['Cozinha']['responsavel'];
+                $responsavelUser = Profile::findOne($responsavelId);
+                if ($responsavelUser) {
+                    $model->responsavel = $responsavelUser->name;
+                }
+            }
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -89,8 +104,10 @@ class CozinhaController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'funcionariosList' => $funcionariosList,
         ]);
     }
+
 
     /**
      * Updates an existing Cozinha model.
