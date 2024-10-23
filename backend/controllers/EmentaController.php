@@ -117,6 +117,15 @@ class EmentaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $pratosNormais = Prato::find()->where(['tipo' => 'prato normal'])->all();
+        $pratosNormaisList = \yii\helpers\ArrayHelper::map($pratosNormais, 'id', 'designacao');
+        $pratosVegetarianos = Prato::find()->where(['tipo' => 'prato vegetariano'])->all();
+        $pratosVegetarianosList = \yii\helpers\ArrayHelper::map($pratosVegetarianos, 'id', 'designacao');
+        $sopas = Prato::find()->where(['tipo' => 'sopa'])->all();
+        $sopasList = \yii\helpers\ArrayHelper::map($sopas, 'id', 'designacao');
+
+        $cozinhas = Cozinha::find()->all();
+        $cozinhasList = \yii\helpers\ArrayHelper::map($cozinhas , 'id' , 'designacao');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -124,6 +133,10 @@ class EmentaController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'cozinhasList' => $cozinhasList,
+            'pratosNormaisList' => $pratosNormaisList,
+            'pratosVegetarianosList' => $pratosVegetarianosList,
+            'sopasList' => $sopasList
         ]);
     }
 

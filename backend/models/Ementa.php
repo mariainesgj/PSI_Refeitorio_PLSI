@@ -34,7 +34,7 @@ class Ementa extends \yii\db\ActiveRecord
     {
         return [
             [['data', 'prato_normal', 'prato_vegetariano', 'sopa', 'cozinha_id'], 'required'],
-            [['data'], 'safe'],
+            ['data', 'date', 'format' => 'php:Y-m-d'],
             [['prato_normal', 'prato_vegetariano', 'sopa', 'cozinha_id'], 'integer'],
             [['cozinha_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cozinha::class, 'targetAttribute' => ['cozinha_id' => 'id']],
         ];
@@ -73,5 +73,20 @@ class Ementa extends \yii\db\ActiveRecord
     public function getSenhas()
     {
         return $this->hasMany(Senha::class, ['ementa_id' => 'id']);
+    }
+
+    public function getPratoNormal()
+    {
+        return $this->hasOne(Prato::class, ['id' => 'prato_normal']);
+    }
+
+    public function getPratoVegetariano()
+    {
+        return $this->hasOne(Prato::class, ['id' => 'prato_vegetariano']);
+    }
+
+    public function getSopa()
+    {
+        return $this->hasOne(Prato::class, ['id' => 'sopa']);
     }
 }
