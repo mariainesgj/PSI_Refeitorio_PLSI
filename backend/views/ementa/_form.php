@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="ementa-form">
+<div class="my-form">
     <div class="container mt-6">
         <div class="row d-flex align-items-center">
             <div class="col-md-6">
@@ -66,7 +66,7 @@ use yii\widgets\ActiveForm;
 </div>
 
 <style>
-    .ementa-form {
+    .my-form {
         background-color: #f8f9fa;
         border-radius: 5px;
         padding: 20px;

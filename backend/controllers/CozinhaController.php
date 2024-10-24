@@ -3,7 +3,9 @@
 namespace backend\controllers;
 
 use app\models\Cozinha;
+use app\models\CozinhaSearch;
 use app\models\Profile;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -40,7 +42,9 @@ class CozinhaController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
+        $searchModel = new CozinhaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        /*$dataProvider = new ActiveDataProvider([
             'query' => Cozinha::find(),
             /*
             'pagination' => [
@@ -51,11 +55,14 @@ class CozinhaController extends Controller
                     'id' => SORT_DESC,
                 ]
             ],
-            */
+
         ]);
+*/
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+
         ]);
     }
 

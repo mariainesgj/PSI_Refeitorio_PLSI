@@ -57,7 +57,7 @@ use yii\widgets\ActiveForm;
 </div>
 
 <style>
-    .cozinha-form {
+    .my-form {
         background-color: #f8f9fa;
         border-radius: 5px;
         padding: 20px;

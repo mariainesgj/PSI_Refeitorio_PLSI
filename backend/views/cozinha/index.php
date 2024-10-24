@@ -17,15 +17,35 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="mb-4" style="color: #979797;">Cozinhas</h3>
-            <p class="mb-0">
-                <?= Html::a('Criar', ['create'], ['class' => 'btn btn-success btn-lg']) ?>
-            </p>
+
+            <div class="mb-3">
+                <?= Html::beginForm(['cozinha/index'], 'get', ['class' => 'input-group']) ?>
+                <?= Html::textInput('CozinhaSearch[localizacao]', $searchModel->localizacao, [
+                    'class' => 'form-control',
+                    'placeholder' => 'Localização',
+                    'style' => 'border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-top-left-radius: 7px; border-bottom-left-radius: 7px '
+                ]) ?>
+                <div class="input-group-append">
+                    <?= Html::submitButton('Pesquisar', [
+                        'class' => 'btn btn-primary ml-2',
+                        'id' => 'btn-pesquisar',
+                        'style' => 'margin-left: 10px;'
+                    ]) ?>
+                </div>
+                <?= Html::endForm() ?>
+            </div>
+
+
+
         </div>
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'options' => ['class' => 'table-responsive'],
-            'tableOptions' => ['class' => 'table table-striped table-bordered'],
+            'tableOptions' => [
+                'class' => 'table table-bordered rounded-table',
+                'style' => 'border-collapse: separate; border-spacing: 0;'
+            ],
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 [
@@ -63,9 +83,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]); ?>
+
+        <p class="text-center">
+            <?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
+        </p>
     </div>
 </div>
-
 
 <style>
     .cozinha-index {
@@ -75,12 +98,29 @@ $this->params['breadcrumbs'][] = $this->title;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
 
     .table th, .table td {
         vertical-align: middle;
     }
+
+    .rounded-table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .rounded-table th, .rounded-table td {
+        border: none;
+        padding: 10px;
+    }
+
+    .rounded-table th {
+        background-color: #ffffff;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .rounded-table tr {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
 </style>
