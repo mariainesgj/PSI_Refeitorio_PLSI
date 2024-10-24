@@ -5,6 +5,7 @@ namespace backend\controllers;
 use app\models\Cozinha;
 use app\models\Ementa;
 use app\models\Prato;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -169,4 +170,47 @@ class EmentaController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    public function actionGetByDateAndCozinha()
+    {
+        $cozinhaId = Yii::$app->request->get('cozinha_id');
+        $data = Yii::$app->request->get('data');
+
+        $ementa = Ementa::find()->where(['cozinha_id' => $cozinhaId, 'data' => $data])->one();
+
+        if ($ementa) {
+            $pratos = [];
+
+            $response = [
+                'ementa_id' => $ementa->id,
+                'pratos' => []
+            ];
+
+            if ($ementa->prato_normal) {
+                $pratoNormal = Prato::find()->where(['id' => $ementa->prato_normal])->one();
+                if ($pratoNormal) {
+                    $response['pratos'][] = $pratoNormal;
+                }
+            }
+
+            if ($ementa->prato_vegetariano) {
+                $pratoVegetariano = Prato::find()->where(['id' => $ementa->prato_vegetariano])->one();
+                if ($pratoVegetariano) {
+                    $response['pratos'][] = $pratoVegetariano;
+                }
+            }
+
+            if ($ementa->sopa) {
+                $sopa = Prato::find()->where(['id' => $ementa->sopa])->one();
+                if ($sopa) {
+                    $response['pratos'][] = $sopa;
+                }
+            }
+            return $this->asJson($response);
+        }
+        return $this->asJson(['ementa_id' => null, 'pratos' => []]);
+    }
+
+
 }

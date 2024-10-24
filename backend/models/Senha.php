@@ -20,10 +20,10 @@ use Yii;
  * @property int $ementa_id
  * @property int $prato_id
  *
- * @property Ementas $ementa
- * @property Linhascarrinhos[] $linhascarrinhos
- * @property Linhasfaturas[] $linhasfaturas
- * @property Pratos $prato
+ * @property Ementa $ementa
+ * @property Linhascarrinho[] $linhascarrinhos
+ * @property Linhasfatura[] $linhasfaturas
+ * @property Prato $prato
  * @property User $user
  */
 class Senha extends \yii\db\ActiveRecord
@@ -42,13 +42,14 @@ class Senha extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['data', 'anulado', 'consumido', 'criado', 'valor', 'descricao', 'iva', 'user_id', 'ementa_id', 'prato_id'], 'required'],
+            [['data', 'valor', 'descricao', 'iva', 'user_id', 'ementa_id', 'prato_id'], 'required'],
             [['data', 'criado', 'alterado'], 'safe'],
-            [['anulado', 'consumido', 'user_id', 'ementa_id', 'prato_id'], 'integer'],
+            [['anulado', 'consumido'], 'boolean'],
+            [['user_id', 'ementa_id', 'prato_id'], 'integer'],
             [['valor', 'iva'], 'number'],
             [['descricao'], 'string', 'max' => 255],
-            [['ementa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ementas::class, 'targetAttribute' => ['ementa_id' => 'id']],
-            [['prato_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pratos::class, 'targetAttribute' => ['prato_id' => 'id']],
+            [['ementa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ementa::class, 'targetAttribute' => ['ementa_id' => 'id']],
+            [['prato_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prato::class, 'targetAttribute' => ['prato_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -81,7 +82,7 @@ class Senha extends \yii\db\ActiveRecord
      */
     public function getEmenta()
     {
-        return $this->hasOne(Ementas::class, ['id' => 'ementa_id']);
+        return $this->hasOne(Ementa::class, ['id' => 'ementa_id']);
     }
 
     /**
@@ -91,7 +92,7 @@ class Senha extends \yii\db\ActiveRecord
      */
     public function getLinhascarrinhos()
     {
-        return $this->hasMany(Linhascarrinhos::class, ['senha_id' => 'id']);
+        return $this->hasMany(Linhascarrinho::class, ['senha_id' => 'id']);
     }
 
     /**
@@ -101,7 +102,7 @@ class Senha extends \yii\db\ActiveRecord
      */
     public function getLinhasfaturas()
     {
-        return $this->hasMany(Linhasfaturas::class, ['senha_id' => 'id']);
+        return $this->hasMany(Linhasfatura::class, ['senha_id' => 'id']);
     }
 
     /**
@@ -111,7 +112,7 @@ class Senha extends \yii\db\ActiveRecord
      */
     public function getPrato()
     {
-        return $this->hasOne(Pratos::class, ['id' => 'prato_id']);
+        return $this->hasOne(Prato::class, ['id' => 'prato_id']);
     }
 
     /**

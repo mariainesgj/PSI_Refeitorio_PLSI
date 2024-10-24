@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use app\models\Cozinha;
 use app\models\Prato;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -79,6 +80,9 @@ class PratoController extends Controller
     {
         $model = new Prato();
 
+        $cozinhas = Cozinha::find()->all();
+        $cozinhasList = \yii\helpers\ArrayHelper::map($cozinhas , 'id' , 'designacao');
+
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -89,6 +93,7 @@ class PratoController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'cozinhasList' => $cozinhasList
         ]);
     }
 

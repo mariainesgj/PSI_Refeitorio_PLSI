@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use app\models\Profile;
 use app\models\Senha;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -79,9 +81,19 @@ class SenhaController extends Controller
     {
         $model = new Senha();
 
+        $utilizadores = Profile::find()->where(['role' => ['aluno', 'professor']])->all();
+        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
+
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                Yii::info('Dados carregados: ' . print_r($model->attributes, true), __METHOD__);
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::error('Erro ao salvar o modelo: ' . print_r($model->getErrors(), true), __METHOD__);
+                }
+            } else {
+                Yii::warning('Falha ao carregar dados do POST.', __METHOD__);
             }
         } else {
             $model->loadDefaultValues();
@@ -89,8 +101,25 @@ class SenhaController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'utilizadoresList' => $utilizadoresList
         ]);
     }
+
+
+    public function actionGetCozinhaId($id)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $profile = Profile::find()->where(['id' => $id])->one();
+
+        if ($profile) {
+            return ['cozinha_id' => $profile->cozinha_id];
+        }
+
+        return ['cozinha_id' => null];
+    }
+
+
 
     /**
      * Updates an existing Senha model.
