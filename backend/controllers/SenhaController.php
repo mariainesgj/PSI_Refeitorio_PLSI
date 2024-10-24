@@ -132,12 +132,16 @@ class SenhaController extends Controller
     {
         $model = $this->findModel($id);
 
+        $utilizadores = Profile::find()->where(['role' => ['aluno', 'professor']])->all();
+        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'utilizadoresList' => $utilizadoresList
         ]);
     }
 

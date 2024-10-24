@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /** @var app\models\Cozinha $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
-<div class="cozinha-form">
+<div class="my-form">
     <div class="container mt-6">
         <div class="row d-flex align-items-center">
             <div class="col-md-6">
