@@ -40,8 +40,8 @@ class CozinhaController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
+    public function actionIndex(){
+
         $searchModel = new CozinhaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         /*$dataProvider = new ActiveDataProvider([

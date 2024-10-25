@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\Cozinha;
 use app\models\Ementa;
+use app\models\EmentaSearch;
 use app\models\Prato;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -41,22 +42,36 @@ class EmentaController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Ementa::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $searchModel = new EmentaSearch();
+        $dataProviders = [];
+
+        $cozinhas = \app\models\Cozinha::find()->all();
+
+        if ($cozinhas) {
+            $activeCozaId = Yii::$app->request->get('cozinha_id', reset($cozinhas)->id);
+
+            foreach ($cozinhas as $cozinha) {
+                $query = Ementa::find()->where(['cozinha_id' => $cozinha->id]);
+                if ($searchModel->load(Yii::$app->request->queryParams)) {
+                    $query->andFilterWhere(['like', 'data', $searchModel->data]);
+                }
+
+                $dataProviders[$cozinha->id] = new ActiveDataProvider([
+                    'query' => $query,
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                ]);
+            }
+        } else {
+            $dataProviders = [];
+        }
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProviders' => $dataProviders,
+            'cozinhas' => $cozinhas,
+            'activeCozaId' => $activeCozaId,
         ]);
     }
 

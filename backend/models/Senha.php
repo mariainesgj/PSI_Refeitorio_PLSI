@@ -19,6 +19,7 @@ use Yii;
  * @property int $user_id
  * @property int $ementa_id
  * @property int $prato_id
+ *  * @property string $lido
  *
  * @property Ementa $ementa
  * @property Linhascarrinho[] $linhascarrinhos
@@ -43,7 +44,7 @@ class Senha extends \yii\db\ActiveRecord
     {
         return [
             [['data', 'valor', 'descricao', 'iva', 'user_id', 'ementa_id', 'prato_id'], 'required'],
-            [['data', 'criado', 'alterado'], 'safe'],
+            [['data', 'criado', 'alterado' , 'lido'], 'safe'],
             [['anulado', 'consumido'], 'boolean'],
             [['user_id', 'ementa_id', 'prato_id'], 'integer'],
             [['valor', 'iva'], 'number'],
@@ -72,6 +73,7 @@ class Senha extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'ementa_id' => 'Ementa ID',
             'prato_id' => 'Prato ID',
+            'lido' => 'Lido'
         ];
     }
 
