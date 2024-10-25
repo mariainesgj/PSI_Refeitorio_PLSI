@@ -2,8 +2,10 @@
 
 namespace backend\controllers;
 
+use app\models\Cozinha;
 use app\models\Profile;
 use app\models\Senha;
+use app\models\SenhaSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -40,24 +42,42 @@ class SenhaController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Senha::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $searchModel = new SenhaSearch();
+        $dataProviders = [];
+
+        $cozinhas = \app\models\Cozinha::find()->all();
+
+        if ($cozinhas) {
+            $activeCozaId = Yii::$app->request->get('cozinha_id', reset($cozinhas)->id);
+
+            foreach ($cozinhas as $cozinha) {
+                $query = Senha::find()
+                    ->joinWith('ementa')
+                    ->where(['ementas.cozinha_id' => $cozinha->id]);
+
+                if ($searchModel->load(Yii::$app->request->queryParams)) {
+                    $query->andFilterWhere(['like', 'senhas.data', $searchModel->data]);
+                }
+
+                $dataProviders[$cozinha->id] = new ActiveDataProvider([
+                    'query' => $query,
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                ]);
+            }
+        } else {
+            $dataProviders = [];
+        }
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProviders' => $dataProviders,
+            'cozinhas' => $cozinhas,
+            'activeCozaId' => $activeCozaId,
         ]);
     }
+
 
     /**
      * Displays a single Senha model.

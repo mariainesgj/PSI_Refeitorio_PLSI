@@ -126,4 +126,16 @@ class Senha extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::class, ['user_id' => 'user_id']);
+    }
+
+    public function getCozinha()
+    {
+        return $this->hasOne(Cozinha::class, ['id' => 'cozinha_id']);
+    }
+
+
 }
