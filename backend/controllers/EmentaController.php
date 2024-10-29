@@ -45,6 +45,24 @@ class EmentaController extends Controller
         $searchModel = new EmentaSearch();
         $dataProviders = [];
 
+        $currentDate = new \DateTime();
+        $weekStart = clone $currentDate;
+        $weekStart->modify('monday this week');
+
+        $weekDays = [];
+        $menus = [];
+
+        for ($i = 0; $i < 5; $i++) {
+            $date = $weekStart->format('Y-m-d');
+            $weekDays[] = $date;
+
+            $menus[$date] = Ementa::find()->where(['data' => $date])->one();
+
+            $weekStart->modify('+1 day');
+        }
+
+        $pratos = Prato::find()->indexBy('id')->all();
+
         $cozinhas = \app\models\Cozinha::find()->all();
 
         if ($cozinhas) {
@@ -72,6 +90,9 @@ class EmentaController extends Controller
             'dataProviders' => $dataProviders,
             'cozinhas' => $cozinhas,
             'activeCozaId' => $activeCozaId,
+            'weekDays' => $weekDays,
+            'menus' => $menus,
+            'pratos' => $pratos,
         ]);
     }
 

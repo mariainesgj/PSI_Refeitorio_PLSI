@@ -43,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 
-        <!-- Tabs -->
         <?php if (!empty($cozinhas)): ?>
             <?= Tabs::widget([
                 'items' => array_map(function($cozinha) use ($dataProviders, $activeCozaId) {
@@ -113,22 +112,19 @@ $this->params['breadcrumbs'][] = $this->title;
             <p class="text-center">Nenhuma cozinha encontrada.</p>
         <?php endif; ?>
 
-        <!--<div style="background-color: #E9FCFF; border-radius: 15px; padding: 15px; margin-bottom: 20px;">
-            <table style="width: 100%;">
-                <tbody>
-                <tr>
-                    <td>Sopa: </td>
-                </tr>
-                <tr>
-                    <td>Prato Normal: </td>
-                    <td>Editar</td>
-                </tr>
-                <tr>
-                    <td>Prato Vegetariano: </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>-->
+        <div class="blue-containers-row d-flex justify-content-around mt-4">
+            <?php for ($i = 0; $i < 5; $i++): ?>
+                <div class="blue-container">
+                    <span class="text-line" style="text-decoration: underline;"><?= $weekDays[$i] ?></span>
+                    <?php
+                    $menu = $menus[$weekDays[$i]];
+                    ?>
+                    <span class="text-line">Sopa: <?= $menu ? Html::encode($pratos[$menu->sopa]->designacao) : 'N/A' ?></span>
+                    <span class="text-line">Menu Principal: <?= $menu ? Html::encode($pratos[$menu->prato_normal]->designacao) : 'N/A' ?></span>
+                    <span class="text-line">Menu Vegetariano: <?= $menu ? Html::encode($pratos[$menu->prato_vegetariano]->designacao) : 'N/A' ?></span>
+                </div>
+            <?php endfor; ?>
+        </div>
 
         <p class="text-center">
             <?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
@@ -167,5 +163,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
     .rounded-table tr {
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .blue-containers-row {
+        gap: 10px;
+        padding-bottom: 20px;
+    }
+
+    .blue-container {
+        background-color: #3b99ff;
+        color: white;
+        width: 50vw;
+        min-height: 20vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        flex-direction: column;
+        padding: 10px;
+        overflow-wrap: break-word;
+    }
+
+    .text-line {
+        font-size: 1.75vh;
+        text-align: center;
+        margin: 5px 0;
     }
 </style>

@@ -3,6 +3,8 @@
 namespace backend\controllers;
 
 use app\models\Cozinha;
+use app\models\Ementa;
+use app\models\Prato;
 use app\models\Profile;
 use app\models\Senha;
 use app\models\SenhaSearch;
@@ -40,16 +42,15 @@ class SenhaController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new SenhaSearch();
         $dataProviders = [];
 
-        $cozinhas = \app\models\Cozinha::find()->all();
+        $cozinhas = Cozinha::find()->all();
 
-        if ($cozinhas) {
-            $activeCozaId = Yii::$app->request->get('cozinha_id', reset($cozinhas)->id);
+        $activeCozaId = Yii::$app->request->get('cozinha_id', $cozinhas ? reset($cozinhas)->id : null);
 
+        if ($activeCozaId) {
             foreach ($cozinhas as $cozinha) {
                 $query = Senha::find()
                     ->joinWith('ementa')
@@ -66,8 +67,6 @@ class SenhaController extends Controller
                     ],
                 ]);
             }
-        } else {
-            $dataProviders = [];
         }
 
         return $this->render('index', [
@@ -77,6 +76,7 @@ class SenhaController extends Controller
             'activeCozaId' => $activeCozaId,
         ]);
     }
+
 
 
     /**

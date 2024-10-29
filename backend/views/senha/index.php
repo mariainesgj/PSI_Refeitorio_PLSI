@@ -125,7 +125,6 @@ $this->params['breadcrumbs'][] = $this->title;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-
     .table th, .table td {
         vertical-align: middle;
     }
@@ -149,6 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
     .rounded-table tr {
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
-
 </style>
+
+
 
