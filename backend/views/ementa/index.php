@@ -45,65 +45,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php if (!empty($cozinhas)): ?>
             <?= Tabs::widget([
-                'items' => array_map(function($cozinha) use ($dataProviders, $activeCozaId) {
+                'items' => array_map(function($cozinha) use ($dataProviders, $activeCozaId, $weekDays, $menus, $pratos) {
+                    $menuContent = '<div class="blue-containers-row d-flex justify-content-around mt-4">';
+
+                    foreach ($weekDays as $day) {
+                        $menu = $menus[$cozinha->id][$day] ?? null;
+
+                        $menuContent .= '<div class="blue-container">';
+                        $menuContent .= '<span class="text-line" style="text-decoration: underline;">' . Yii::$app->formatter->asDate($day, 'php:D, d M Y') . '</span>';
+
+                        if ($menu !== null) {
+                            $menuContent .= '<span class="text-line">Sopa: ' . Html::encode($pratos[$menu->sopa]->designacao ?? 'N/A') . '</span>';
+                            $menuContent .= '<span class="text-line">Menu Principal: ' . Html::encode($pratos[$menu->prato_normal]->designacao ?? 'N/A') . '</span>';
+                            $menuContent .= '<span class="text-line">Menu Vegetariano: ' . Html::encode($pratos[$menu->prato_vegetariano]->designacao ?? 'N/A') . '</span>';
+                        } else {
+                            $menuContent .= '<span class="text-line">Menu não encontrado</span>';
+                        }
+
+                        $menuContent .= '</div>';
+                    }
+
+                    $menuContent .= '</div>';
+
                     return [
                         'label' => Html::encode($cozinha->designacao),
-                        'content' => GridView::widget([
-                            'dataProvider' => $dataProviders[$cozinha->id] ?? null,
-                            'options' => ['class' => 'table-responsive'],
-                            'tableOptions' => [
-                                'class' => 'table table-bordered rounded-table',
-                                'style' => 'border-collapse: separate; border-spacing: 0;',
-                            ],
-                            'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
-                                [
-                                    'attribute' => 'data',
-                                    'header' => 'Data',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'contentOptions' => ['class' => 'text-center'],
-                                    'value' => function ($model) {
-                                        return Yii::$app->formatter->asDate($model->data, 'php:Y-m-d');
-                                    },
-                                ],
-                                [
-                                    'attribute' => 'prato_normal',
-                                    'header' => 'Prato Normal',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'contentOptions' => ['class' => 'text-center'],
-                                    'value' => function ($model) {
-                                        return $model->getPratoNormal()->one() ? $model->getPratoNormal()->one()->designacao : 'N/A';
-                                    },
-                                ],
-                                [
-                                    'attribute' => 'prato_vegetariano',
-                                    'header' => 'Prato Vegetariano',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'contentOptions' => ['class' => 'text-center'],
-                                    'value' => function ($model) {
-                                        return $model->getPratoVegetariano()->one() ? $model->getPratoVegetariano()->one()->designacao : 'N/A';
-                                    },
-                                ],
-                                [
-                                    'attribute' => 'sopa',
-                                    'header' => 'Sopa',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'contentOptions' => ['class' => 'text-center'],
-                                    'value' => function ($model) {
-                                        return $model->getSopa()->one() ? $model->getSopa()->one()->designacao : 'N/A';
-                                    },
-                                ],
-                                [
-                                    'class' => ActionColumn::className(),
-                                    'header' => 'Ações',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'urlCreator' => function ($action, Ementa $model, $key, $index, $column) {
-                                        return Url::toRoute([$action, 'id' => $model->id]);
-                                    },
-                                    'contentOptions' => ['class' => 'text-center'],
-                                ],
-                            ],
-                        ]),
+                        'content' => $menuContent,
                         'active' => $cozinha->id == $activeCozaId,
                     ];
                 }, $cozinhas),
@@ -112,25 +78,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <p class="text-center">Nenhuma cozinha encontrada.</p>
         <?php endif; ?>
 
-        <div class="blue-containers-row d-flex justify-content-around mt-4">
-            <?php for ($i = 0; $i < 5; $i++): ?>
-                <div class="blue-container">
-                    <span class="text-line" style="text-decoration: underline;"><?= $weekDays[$i] ?></span>
-                    <?php
-                    $menu = $menus[$weekDays[$i]];
-                    ?>
-                    <span class="text-line">Sopa: <?= $menu ? Html::encode($pratos[$menu->sopa]->designacao) : 'N/A' ?></span>
-                    <span class="text-line">Menu Principal: <?= $menu ? Html::encode($pratos[$menu->prato_normal]->designacao) : 'N/A' ?></span>
-                    <span class="text-line">Menu Vegetariano: <?= $menu ? Html::encode($pratos[$menu->prato_vegetariano]->designacao) : 'N/A' ?></span>
-                </div>
-            <?php endfor; ?>
-        </div>
-
         <p class="text-center">
             <?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
         </p>
+
     </div>
-</div>
 
 
 <style>

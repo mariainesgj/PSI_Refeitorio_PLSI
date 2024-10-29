@@ -40,8 +40,8 @@ class EmentaController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
+    public function actionIndex(){
+
         $searchModel = new EmentaSearch();
         $dataProviders = [];
 
@@ -55,9 +55,6 @@ class EmentaController extends Controller
         for ($i = 0; $i < 5; $i++) {
             $date = $weekStart->format('Y-m-d');
             $weekDays[] = $date;
-
-            $menus[$date] = Ementa::find()->where(['data' => $date])->one();
-
             $weekStart->modify('+1 day');
         }
 
@@ -69,9 +66,25 @@ class EmentaController extends Controller
             $activeCozaId = Yii::$app->request->get('cozinha_id', reset($cozinhas)->id);
 
             foreach ($cozinhas as $cozinha) {
+                foreach ($weekDays as $date) {
+                    $formattedDate = (new \DateTime($date))->format('Y-m-d H:i:s');
+
+                    $ementa = Ementa::find()
+                        ->where(['data' => $formattedDate, 'cozinha_id' => $cozinha->id])
+                        ->one();
+
+                    $menus[$cozinha->id][$date] = $ementa ?? null;
+                }
+
                 $query = Ementa::find()->where(['cozinha_id' => $cozinha->id]);
+
+
                 if ($searchModel->load(Yii::$app->request->queryParams)) {
-                    $query->andFilterWhere(['like', 'data', $searchModel->data]);
+                    $searchDate = $searchModel->data;
+                    if ($searchDate) {
+                        $formattedSearchDate = (new \DateTime($searchDate))->format('Y-m-d');
+                        $query->andWhere(['data' => $formattedSearchDate]);
+                    }
                 }
 
                 $dataProviders[$cozinha->id] = new ActiveDataProvider([
@@ -80,6 +93,7 @@ class EmentaController extends Controller
                         'pageSize' => 10,
                     ],
                 ]);
+
             }
         } else {
             $dataProviders = [];
@@ -95,6 +109,8 @@ class EmentaController extends Controller
             'pratos' => $pratos,
         ]);
     }
+
+
 
     /**
      * Displays a single Ementa model.
