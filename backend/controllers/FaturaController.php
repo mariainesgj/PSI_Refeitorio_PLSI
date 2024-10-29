@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\Fatura;
 use app\models\FaturaSearch;
+use app\models\Profile;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -70,6 +71,12 @@ class FaturaController extends Controller
     public function actionCreate()
     {
         $model = new Fatura();
+        $utilizadores = Profile::find()
+            ->select(['id', 'name', 'locale', 'street', 'postalCode'])
+            ->where(['role' => ['aluno', 'professor']])
+            ->asArray() // Obter como array
+            ->all();
+        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -81,8 +88,12 @@ class FaturaController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'utilizadoresList' => $utilizadoresList,
+            'utilizadores' => $utilizadores
         ]);
     }
+
+
 
     /**
      * Updates an existing Fatura model.

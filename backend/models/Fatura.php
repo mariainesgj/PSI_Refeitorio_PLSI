@@ -13,11 +13,14 @@ use Yii;
  * @property string $data
  * @property int $user_id
  *
- * @property Linhasfaturas[] $linhasfaturas
+ * @property Linhasfatura[] $linhasfaturas
  * @property User $user
  */
 class Fatura extends \yii\db\ActiveRecord
 {
+    public $street;
+    public $locale;
+    public $postalCode;
     /**
      * {@inheritdoc}
      */
