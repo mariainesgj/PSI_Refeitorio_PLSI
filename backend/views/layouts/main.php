@@ -39,8 +39,14 @@ AppAsset::register($this);
         ['label' => 'Ementas', 'url' => ['/ementa/index']],
         ['label' => 'Pratos', 'url' => ['/prato/index']],
         ['label' => 'Senhas', 'url' => ['/senha/index']],
-        ['label' => 'Faturas', 'url' => ['/fatura/index']],
-        ['label' => 'Movimentos', 'url' => ['/movimento/index']],
+        [
+            'label' => 'Faturas',
+            'items' => [
+                ['label' => 'Gerar Fatura', 'url' => ['/fatura/create']],
+                ['label' => 'Consultar Faturas', 'url' => ['/fatura/index']],
+                ['label' => 'Consultar Movimentos', 'url' => ['/movimento/index']],
+            ],
+        ],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];

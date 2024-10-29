@@ -54,7 +54,9 @@ class SenhaController extends Controller
             foreach ($cozinhas as $cozinha) {
                 $query = Senha::find()
                     ->joinWith('ementa')
-                    ->where(['ementas.cozinha_id' => $cozinha->id]);
+                    ->where(['ementas.cozinha_id' => $cozinha->id])
+                    // Filtrar senhas da data atual
+                    ->andWhere(['DATE(senhas.data)' => date('Y-m-d')]);
 
                 if ($searchModel->load(Yii::$app->request->queryParams)) {
                     $query->andFilterWhere(['like', 'senhas.data', $searchModel->data]);
@@ -194,4 +196,24 @@ class SenhaController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    public function actionAnular($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model) {
+            $model->anulado = 1;
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Senha anulada com sucesso.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Erro ao anular a senha.');
+            }
+        } else {
+            throw new NotFoundHttpException('Senha não encontrada.');
+        }
+
+        return $this->redirect(['index']);
+    }
+
 }

@@ -61,7 +61,7 @@ class Fatura extends \yii\db\ActiveRecord
      */
     public function getLinhasfaturas()
     {
-        return $this->hasMany(Linhasfaturas::class, ['fatura_id' => 'id']);
+        return $this->hasMany(Linhasfatura::class, ['fatura_id' => 'id']);
     }
 
     /**
@@ -72,5 +72,10 @@ class Fatura extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getUserProfile()
+    {
+        return $this->hasOne(Profile::class, ['user_id' => 'user_id']);
     }
 }

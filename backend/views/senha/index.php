@@ -3,12 +3,10 @@
 use app\models\Senha;
 use yii\bootstrap5\Tabs;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var app\models\SenhaSearch $searchModel */
 
 $this->title = 'Senhas';
 $this->params['breadcrumbs'][] = $this->title;
@@ -41,71 +39,40 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if (!empty($cozinhas)): ?>
             <?= Tabs::widget([
                 'items' => array_map(function($cozinha) use ($dataProviders, $activeCozaId) {
+                    $senhaModels = $dataProviders[$cozinha->id]->getModels();
+
                     return [
                         'label' => Html::encode($cozinha->designacao),
-                        'content' => GridView::widget([
-                            'dataProvider' => $dataProviders[$cozinha->id] ?? null,
-                            'options' => ['class' => 'table-responsive'],
-                            'tableOptions' => [
-                                'class' => 'table table-bordered rounded-table',
-                                'style' => 'border-collapse: separate; border-spacing: 0;',
-                            ],
-                            'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
-                                [
-                                    'attribute' => 'data',
-                                    'header' => 'Data',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'contentOptions' => ['class' => 'text-center'],
-                                    'value' => function ($model) {
-                                        return Yii::$app->formatter->asDate($model->data, 'php:Y-m-d');
-                                    },
-                                ],
-                                [
-                                    'attribute' => 'user_id',
-                                    'header' => 'Utilizador',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'contentOptions' => ['class' => 'text-center'],
-                                    'value' => function ($model) {
-                                        return $model->profile ? $model->profile->name : 'N/A';
-                                    },
-                                ],
-                                [
-                                    'attribute' => 'prato_id',
-                                    'header' => 'Menu Escolhido',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'contentOptions' => ['class' => 'text-center'],
-                                    'value' => function ($model) {
-                                        return $model->prato ? $model->prato->designacao : 'N/A';
-                                    },
-                                ],
-                                [
-                                    'attribute' => 'lido',
-                                    'header' => 'Lido',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'contentOptions' => ['class' => 'text-center'],
-                                    'value' => function ($model) {
-                                        if ($model->lido === null) {
-                                            return 'Não lido ainda';
-                                        } else {
-                                            return Yii::$app->formatter->asTime($model->lido, 'php:H:i');
-                                        }
-                                    },
-                                ],
-                                [
-                                    'class' => ActionColumn::className(),
-                                    'header' => 'Ações',
-                                    'headerOptions' => ['class' => 'text-center'],
-                                    'urlCreator' => function ($action, Senha $model, $key, $index, $column) {
-                                        return Url::toRoute([$action, 'id' => $model->id]);
-                                    },
-                                    'contentOptions' => ['class' => 'text-center'],
-                                ],
-                            ],
-                        ]),
+                        'content' => !empty($senhaModels) ?
+                            implode('', array_map(function($model) {
+                                $content = '<div class="rounded-container p-3 mb-3">'
+                                    . '<div class="d-flex justify-content-between dish-details">'
+                                    . '<div>' . Html::encode($model->profile ? $model->profile->name : 'N/A') . '</div>'
+                                    . '<div>' . Html::encode($model->profile ? ucfirst($model->profile->role) : 'N/A') . '</div>'
+                                    . '<div>' . Html::encode($model->prato ? $model->prato->designacao : 'N/A') . '</div>'
+                                    . '<div>' . ($model->lido === null ? 'Não lido ainda' : Yii::$app->formatter->asTime($model->lido, 'php:H:i')) . '</div>'
+                                    . Html::a('Editar', ['senha/update', 'id' => $model->id], [
+                                        'class' => 'btn text-white',
+                                        'style' => 'background-color: transparent; border: 1px solid white; padding: 5px 10px; margin-right: 10px;'
+                                    ]);
+
+                                if ($model->anulado !== 1) {
+                                    $content .= Html::a('Anular', ['senha/anular', 'id' => $model->id], [
+                                        'class' => 'btn btn-danger',
+                                        'data' => [
+                                            'confirm' => 'Tem certeza que deseja anular esta senha?',
+                                            'method' => 'post',
+                                        ],
+                                    ]);
+                                }
+
+                                return $content . '</div></div>';
+                            }, $senhaModels))
+                            : '<p class="text-center" style="margin-top: 3vh">Sem agendamentos para o dia atual.</p>',
                         'active' => $cozinha->id == $activeCozaId,
                     ];
                 }, $cozinhas),
+                'options' => ['style' => 'padding-bottom: 3.5vh;'],
             ]); ?>
         <?php else: ?>
             <p class="text-center">Nenhuma cozinha encontrada.</p>
@@ -125,30 +92,15 @@ $this->params['breadcrumbs'][] = $this->title;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .table th, .table td {
-        vertical-align: middle;
-    }
-
-    .rounded-table {
+    .rounded-container {
+        background-color: #3b99ff;
         border-radius: 10px;
-        overflow: hidden;
+        color: white;
+        padding: 20px;
+        padding-top: 30px;
     }
 
-    .rounded-table th, .rounded-table td {
-        border: none;
-        padding: 10px;
-    }
-
-    .rounded-table th {
-        background-color: #ffffff;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    .rounded-table tr {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    .dish-details {
+        margin-top: 10px;
     }
 </style>
-
-
-

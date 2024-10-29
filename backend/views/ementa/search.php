@@ -12,10 +12,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="search-results">
-    <div class="container mt-4 d-flex justify-content-between align-items-center"> <!-- Adicionando classes de flexbox -->
+    <div class="container mt-4 d-flex justify-content-between align-items-center">
         <h3><?= Html::encode($this->title) ?></h3>
         <?= Html::a('Voltar', ['ementa/index'], [
-            'class' => 'btn btn-secondary', // Aqui você pode usar a classe que desejar
+            'class' => 'btn btn-secondary',
             'style' => 'margin-left: 10px;'
         ]) ?>
     </div>
