@@ -19,7 +19,7 @@ if (empty($senhas)) {
             $totalComIva = $valor + ($valor * $iva / 100);
             echo "<td  style='text-align: center'>" . Html::encode(number_format($totalComIva, 2, ',', '.')) . "</td>";
         } else {
-            echo "<td  style='text-align: center'>" . Html::encode('Total não disponível') . "</td>";
+            echo "<td>" . Html::encode('Total não disponível') . "</td>";
         }
 
         echo "</tr>";

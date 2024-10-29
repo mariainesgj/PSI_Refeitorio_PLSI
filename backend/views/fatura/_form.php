@@ -58,6 +58,8 @@ use yii\widgets\ActiveForm;
                     </table>
                 </div>
 
+
+
                 <div class="form-group text-center">
                     <?= Html::submitButton('Gerar', ['class' => 'btn btn-lg', 'style' => 'color: #50A9B4; text-decoration: underline;']) ?>
                 </div>
@@ -89,6 +91,36 @@ use yii\widgets\ActiveForm;
                 background-repeat: no-repeat;
                 background-position: right 10px center;
                 background-size: 16px;
+            }
+
+            .right-aligned {
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 20px;
+                width: 300px;
+                margin-left: auto;
+                margin-right: 0;
+                text-align: right;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .right-aligned p {
+                margin: 10px 0;
+            }
+            .column {
+                display: flex;
+                justify-content: space-between;
+                margin: 10px 0;
+            }
+
+            .text {
+                text-align: left;
+                flex: 1;
+            }
+            .value {
+                text-align: right;
+                flex: 1;
             }
         </style>
 

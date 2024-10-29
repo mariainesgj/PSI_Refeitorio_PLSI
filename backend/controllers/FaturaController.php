@@ -75,7 +75,7 @@ class FaturaController extends Controller
         $utilizadores = Profile::find()
             ->select(['id', 'name', 'locale', 'street', 'postalCode'])
             ->where(['role' => ['aluno', 'professor']])
-            ->asArray() // Obter como array
+            ->asArray()
             ->all();
         $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
 
@@ -90,7 +90,7 @@ class FaturaController extends Controller
         return $this->render('create', [
             'model' => $model,
             'utilizadoresList' => $utilizadoresList,
-            'utilizadores' => $utilizadores
+            'utilizadores' => $utilizadores,
         ]);
     }
 
