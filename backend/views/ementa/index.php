@@ -8,7 +8,6 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
-
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider[] $dataProviders */
 /** @var app\models\EmentaSearch $searchModel */
@@ -21,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="cozinha-index">
     <div class="container mt-4 align">
         <div class="row align-items-center mb-4">
-            <div class="col-auto  me-auto">
+            <div class="col-auto me-auto">
                 <h3 class="mb-0" style="color: #979797;">Ementas</h3>
             </div>
             <div class="col-auto">
@@ -52,14 +51,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         $menu = $menus[$cozinha->id][$day] ?? null;
 
                         $menuContent .= '<div class="blue-container">';
-                        $menuContent .= '<span class="text-line" style="text-decoration: underline;">' . Yii::$app->formatter->asDate($day, 'php:D, d M Y') . '</span>';
+                        $menuContent .= '<span class="text-line date-line" style="text-decoration: underline;">' . Yii::$app->formatter->asDate($day, 'php:D, d M Y') . '</span>';
 
                         if ($menu !== null) {
-                            $menuContent .= '<span class="text-line">Sopa: ' . Html::encode($pratos[$menu->sopa]->designacao ?? 'N/A') . '</span>';
-                            $menuContent .= '<span class="text-line">Menu Principal: ' . Html::encode($pratos[$menu->prato_normal]->designacao ?? 'N/A') . '</span>';
-                            $menuContent .= '<span class="text-line">Menu Vegetariano: ' . Html::encode($pratos[$menu->prato_vegetariano]->designacao ?? 'N/A') . '</span>';
+                            $menuContent .= '<span class="text-line dish-line">Sopa: ' . Html::encode($pratos[$menu->sopa]->designacao ?? 'N/A') . '</span>';
+                            $menuContent .= '<span class="text-line dish-line">Menu Principal: ' . Html::encode($pratos[$menu->prato_normal]->designacao ?? 'N/A') . '</span>';
+                            $menuContent .= '<span class="text-line dish-line">Menu Vegetariano: ' . Html::encode($pratos[$menu->prato_vegetariano]->designacao ?? 'N/A') . '</span>';
                         } else {
-                            $menuContent .= '<span class="text-line">Menu não encontrado</span>';
+                            $menuContent .= '<div  class="date-line">';
+                            $menuContent .= '<img src="' . Yii::getAlias('@web/images/img.png') . '" alt="Imagem ilustrativa" class="img-fluid" style="width: 7vw"><br>';
+                            $menuContent .= '<span>Ainda sem ementa</span>';
+                            $menuContent .= '</div>';
                         }
 
                         $menuContent .= '</div>';
@@ -81,9 +83,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <p class="text-center">
             <?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
         </p>
-
     </div>
-
+</div>
 
 <style>
     .cozinha-index {
@@ -126,10 +127,10 @@ $this->params['breadcrumbs'][] = $this->title;
         background-color: #3b99ff;
         color: white;
         width: 50vw;
-        min-height: 20vh;
+        min-height: 25vh;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        align-items: start;
+        justify-content: start;
         border-radius: 5px;
         flex-direction: column;
         padding: 10px;
@@ -138,7 +139,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
     .text-line {
         font-size: 1.75vh;
-        text-align: center;
         margin: 5px 0;
     }
+
+    .date-line {
+        text-align: center;
+        width: 100%;
+    }
+
+    .dish-line {
+        text-align: left;
+        padding-left: 10px;
+    }
+
 </style>
