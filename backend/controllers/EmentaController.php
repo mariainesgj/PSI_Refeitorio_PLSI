@@ -40,14 +40,13 @@ class EmentaController extends Controller
      *
      * @return string
      */
-    public function actionIndex(){
-
+    public function actionIndex() {
         $searchModel = new EmentaSearch();
         $dataProviders = [];
 
-        $currentDate = new \DateTime();
-        $weekStart = clone $currentDate;
+        $weekStart = Yii::$app->request->get('week_start') ? new \DateTime(Yii::$app->request->get('week_start')) : new \DateTime();
         $weekStart->modify('monday this week');
+
 
         $weekDays = [];
         $menus = [];
@@ -59,7 +58,6 @@ class EmentaController extends Controller
         }
 
         $pratos = Prato::find()->indexBy('id')->all();
-
         $cozinhas = \app\models\Cozinha::find()->all();
 
         if ($cozinhas) {
@@ -78,7 +76,6 @@ class EmentaController extends Controller
 
                 $query = Ementa::find()->where(['cozinha_id' => $cozinha->id]);
 
-
                 if ($searchModel->load(Yii::$app->request->queryParams)) {
                     $searchDate = $searchModel->data;
                     if ($searchDate) {
@@ -93,7 +90,6 @@ class EmentaController extends Controller
                         'pageSize' => 10,
                     ],
                 ]);
-
             }
         } else {
             $dataProviders = [];
@@ -109,6 +105,7 @@ class EmentaController extends Controller
             'pratos' => $pratos,
         ]);
     }
+
 
 
 

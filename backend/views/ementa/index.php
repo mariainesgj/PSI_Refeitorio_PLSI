@@ -47,12 +47,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'items' => array_map(function($cozinha) use ($dataProviders, $activeCozaId, $weekDays, $menus, $pratos) {
                     $menuContent = '<div class="blue-containers-row d-flex justify-content-around mt-4">';
 
+                    $currentWeekStart = new \DateTime($weekDays[0]);
+                    $prevDay = (clone $currentWeekStart)->modify('-1 day')->format('Y-m-d');
+                    $nextDay = (clone $currentWeekStart)->modify('+7 day')->format('Y-m-d');
+
                     $menuContent .= '<div class="arrow-left">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b99ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <line x1="15" y1="18" x2="9" y2="12"></line>
-                                            <line x1="15" y1="6" x2="9" y2="12"></line>
-                                        </svg>
-                                    </div>';
+                                <a href="' . Url::to(['ementa/index', 'week_start' => $prevDay, 'cozinha_id' => $cozinha->id]) . '">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b99ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="15" y1="18" x2="9" y2="12"></line>
+                                        <line x1="15" y1="6" x2="9" y2="12"></line>
+                                    </svg>
+                                </a>
+                            </div>';
 
                     foreach ($weekDays as $day) {
                         $menu = $menus[$cozinha->id][$day] ?? null;
@@ -75,11 +81,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
 
                     $menuContent .= '<div class="arrow-right">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b99ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <line x1="9" y1="6" x2="15" y2="12"></line>
-                                            <line x1="9" y1="18" x2="15" y2="12"></line>
-                                        </svg>
-                                    </div>';
+                                <a href="' . Url::to(['ementa/index', 'week_start' => $nextDay, 'cozinha_id' => $cozinha->id]) . '">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b99ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="9" y1="6" x2="15" y2="12"></line>
+                                        <line x1="9" y1="18" x2="15" y2="12"></line>
+                                    </svg>
+                                </a>
+                            </div>';
+
 
                     $menuContent .= '</div>';
 
@@ -93,6 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php else: ?>
             <p class="text-center">Nenhuma cozinha encontrada.</p>
         <?php endif; ?>
+
 
         <p class="text-center">
             <?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
@@ -142,7 +152,7 @@ $this->params['breadcrumbs'][] = $this->title;
         background-color: #3b99ff;
         color: white;
         width: 50vw;
-        min-height: 25vh;
+        min-height: 26vh;
         display: flex;
         align-items: start;
         justify-content: start;
