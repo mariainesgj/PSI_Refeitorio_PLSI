@@ -47,6 +47,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'items' => array_map(function($cozinha) use ($dataProviders, $activeCozaId, $weekDays, $menus, $pratos) {
                     $menuContent = '<div class="blue-containers-row d-flex justify-content-around mt-4">';
 
+                    $menuContent .= '<div class="arrow-left">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b99ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="15" y1="18" x2="9" y2="12"></line>
+                                            <line x1="15" y1="6" x2="9" y2="12"></line>
+                                        </svg>
+                                    </div>';
+
                     foreach ($weekDays as $day) {
                         $menu = $menus[$cozinha->id][$day] ?? null;
 
@@ -58,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             $menuContent .= '<span class="text-line dish-line">Menu Principal: ' . Html::encode($pratos[$menu->prato_normal]->designacao ?? 'N/A') . '</span>';
                             $menuContent .= '<span class="text-line dish-line">Menu Vegetariano: ' . Html::encode($pratos[$menu->prato_vegetariano]->designacao ?? 'N/A') . '</span>';
                         } else {
-                            $menuContent .= '<div  class="date-line">';
+                            $menuContent .= '<div class="date-line">';
                             $menuContent .= '<img src="' . Yii::getAlias('@web/images/img.png') . '" alt="Imagem ilustrativa" class="img-fluid" style="width: 7vw"><br>';
                             $menuContent .= '<span>Ainda sem ementa</span>';
                             $menuContent .= '</div>';
@@ -66,6 +73,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         $menuContent .= '</div>';
                     }
+
+                    $menuContent .= '<div class="arrow-right">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b99ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="9" y1="6" x2="15" y2="12"></line>
+                                            <line x1="9" y1="18" x2="15" y2="12"></line>
+                                        </svg>
+                                    </div>';
 
                     $menuContent .= '</div>';
 
@@ -121,6 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
     .blue-containers-row {
         gap: 10px;
         padding-bottom: 20px;
+        align-items: center;
     }
 
     .blue-container {
@@ -152,4 +167,8 @@ $this->params['breadcrumbs'][] = $this->title;
         padding-left: 10px;
     }
 
+    .arrow-left, .arrow-right {
+        display: flex;
+        align-items: center;
+    }
 </style>
