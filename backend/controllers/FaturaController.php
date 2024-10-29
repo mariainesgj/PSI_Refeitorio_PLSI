@@ -5,6 +5,7 @@ namespace backend\controllers;
 use app\models\Fatura;
 use app\models\FaturaSearch;
 use app\models\Profile;
+use app\models\Senha;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -144,4 +145,18 @@ class FaturaController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    public function actionGetSenhas($userId){
+        $senhas = Senha::find()
+            ->where(['user_id' => $userId, 'pago' => 0, 'consumido' => 0])
+            ->with('valor')
+            ->all();
+
+
+        return $this->renderAjax('_senhas', [
+            'senhas' => $senhas,
+        ]);
+    }
+
 }

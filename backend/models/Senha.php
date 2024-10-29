@@ -137,5 +137,10 @@ class Senha extends \yii\db\ActiveRecord
         return $this->hasOne(Cozinha::class, ['id' => 'cozinha_id']);
     }
 
+    public function getValor()
+    {
+        return $this->hasOne(Valor::class, ['id' => 'valor_id']);
+    }
+
 
 }
