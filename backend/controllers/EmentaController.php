@@ -262,4 +262,28 @@ class EmentaController extends Controller
     }
 
 
+    public function actionSearch()
+    {
+        $searchModel = new EmentaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $cozinhaId = Yii::$app->request->get('EmentaSearch')['cozinha_id'] ?? null;
+        if ($dataProvider->getCount() > 0) {
+            $ementas = $dataProvider->getModels();
+            foreach ($ementas as $ementa) {
+                $ementa->sopa = Prato::findOne($ementa->sopa);
+                $ementa->prato_normal = Prato::findOne($ementa->prato_normal);
+                $ementa->prato_vegetariano = Prato::findOne($ementa->prato_vegetariano);
+            }
+        }
+        return $this->render('search', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'cozinhaId' => $cozinhaId,
+        ]);
+    }
+
+
+
+
 }

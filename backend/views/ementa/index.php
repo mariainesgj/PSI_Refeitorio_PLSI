@@ -24,7 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="mb-0" style="color: #979797;">Ementas</h3>
             </div>
             <div class="col-auto">
-                <?= Html::beginForm(['ementa/index'], 'get', ['class' => 'input-group']) ?>
+                <?= Html::beginForm(['ementa/search'], 'get', ['class' => 'input-group']) ?>
+                <?= Html::hiddenInput('EmentaSearch[cozinha_id]', $activeCozaId) ?>
                 <?= Html::textInput('EmentaSearch[data]', $searchModel->data, [
                     'class' => 'form-control',
                     'placeholder' => 'Data',

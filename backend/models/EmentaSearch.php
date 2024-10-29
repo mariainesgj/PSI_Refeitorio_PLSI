@@ -9,26 +9,16 @@ use app\models\Ementa;
 class EmentaSearch extends Model
 {
     public $data;
+    public $cozinha_id;
 
-    /**
-     * Regras de validação para o campo de pesquisa.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
             [['data'], 'safe'],
+            [['cozinha_id'], 'integer'],
         ];
     }
 
-    /**
-     * Configura o cenário de pesquisa.
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params)
     {
         $query = Ementa::find();
@@ -44,16 +34,21 @@ class EmentaSearch extends Model
                 ],
             ],
         ]);
+
         $this->load($params);
 
         if (!$this->validate()) {
             return $dataProvider;
         }
+
         if (!empty($this->data)) {
             $query->andFilterWhere(['like', 'data', $this->data]);
+        }
+
+        if ($this->cozinha_id) {
+            $query->andFilterWhere(['cozinha_id' => $this->cozinha_id]);
         }
 
         return $dataProvider;
     }
 }
-
