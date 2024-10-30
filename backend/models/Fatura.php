@@ -8,10 +8,11 @@ use Yii;
  * This is the model class for table "faturas".
  *
  * @property int $id
- * @property float $total
- * @property float $iva
+ * @property float $total_iliquido
+ * @property float $total_iva
  * @property string $data
  * @property int $user_id
+ * @property float $total_doc
  *
  * @property Linhasfatura[] $linhasfaturas
  * @property User $user
@@ -35,8 +36,8 @@ class Fatura extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['total', 'iva', 'data', 'user_id'], 'required'],
-            [['total', 'iva'], 'number'],
+            [['total_iliquido', 'total_iva', 'total_doc', 'data', 'user_id'], 'required'],
+            [['total_iliquido', 'total_iva' ,'total_doc'], 'number'],
             [['data'], 'safe'],
             [['user_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
@@ -50,10 +51,11 @@ class Fatura extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'total' => 'Total',
-            'iva' => 'Iva',
+            'total_iliquido' => 'Total Ilíquido',
+            'total_iva' => 'Total Iva',
             'data' => 'Data',
             'user_id' => 'User ID',
+            'total_doc' => 'Total Documento',
         ];
     }
 

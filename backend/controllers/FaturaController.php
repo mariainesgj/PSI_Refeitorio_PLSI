@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\Fatura;
 use app\models\FaturaSearch;
+use app\models\Linhasfatura;
 use app\models\Profile;
 use app\models\Senha;
 use Yii;
@@ -79,12 +80,17 @@ class FaturaController extends Controller
             ->all();
         $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            // Recebe os totais do formulário
+            $model->total_iliquido = $this->request->post('Fatura')['total_iliquido'];
+            $model->total_iva = $this->request->post('Fatura')['total_iva'];
+            $model->total_doc = $this->request->post('Fatura')['total_doc'];
+            $model->user_id = $this->request->post('user_id');
+
+            // Salva a fatura
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -93,6 +99,8 @@ class FaturaController extends Controller
             'utilizadores' => $utilizadores,
         ]);
     }
+
+
 
 
 
