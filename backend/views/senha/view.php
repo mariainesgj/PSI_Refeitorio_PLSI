@@ -31,17 +31,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'data',
-            'anulado',
-            'consumido',
+            'anulado:boolean',
+            'consumido:boolean',
             'criado',
             'alterado',
-            'valor',
             'descricao',
-            'iva',
             'user_id',
             'ementa_id',
             'prato_id',
+            'lido',
+            [
+                'label' => 'Valor',
+                'value' => $model->valor ? $model->valor->valor : null,
+            ],
+            [
+                'label' => 'IVA',
+                'value' => $model->valor ? $model->valor->iva : null,
+            ],
         ],
     ]) ?>
+
 
 </div>

@@ -42,35 +42,34 @@ class SenhaController extends Controller
      *
      * @return string
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new SenhaSearch();
         $dataProviders = [];
 
         $cozinhas = Cozinha::find()->all();
 
         $activeCozaId = Yii::$app->request->get('cozinha_id', $cozinhas ? reset($cozinhas)->id : null);
+        $searchModel->load(Yii::$app->request->queryParams);
 
-        if ($activeCozaId) {
-            foreach ($cozinhas as $cozinha) {
-                $query = Senha::find()
-                    ->joinWith('ementa')
-                    ->where(['ementas.cozinha_id' => $cozinha->id])
-                    // Filtrar senhas da data atual
-                    ->andWhere(['DATE(senhas.data)' => date('Y-m-d')]);
+        foreach ($cozinhas as $cozinha) {
+            $query = Senha::find()
+                ->joinWith('ementa')
+                ->where(['ementas.cozinha_id' => $cozinha->id]);
 
-                if ($searchModel->load(Yii::$app->request->queryParams)) {
-                    $query->andFilterWhere(['like', 'senhas.data', $searchModel->data]);
-                }
-
-                $dataProviders[$cozinha->id] = new ActiveDataProvider([
-                    'query' => $query,
-                    'pagination' => [
-                        'pageSize' => 10,
-                    ],
-                ]);
+            if (!empty($searchModel->data)) {
+                $query->andWhere(['DATE(senhas.data)' => $searchModel->data]);
+            } else {
+                $query->andWhere(['DATE(senhas.data)' => date('Y-m-d')]);
             }
-        }
 
+            $dataProviders[$cozinha->id] = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProviders' => $dataProviders,
@@ -78,6 +77,7 @@ class SenhaController extends Controller
             'activeCozaId' => $activeCozaId,
         ]);
     }
+
 
 
 

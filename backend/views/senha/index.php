@@ -12,6 +12,7 @@ $this->title = 'Senhas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+
 <div class="cozinha-index">
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -45,28 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => Html::encode($cozinha->designacao),
                         'content' => !empty($senhaModels) ?
                             implode('', array_map(function($model) {
-                                $content = '<div class="rounded-container p-3 mb-3">'
-                                    . '<div class="d-flex justify-content-between dish-details">'
-                                    . '<div>' . Html::encode($model->profile ? $model->profile->name : 'N/A') . '</div>'
-                                    . '<div>' . Html::encode($model->profile ? ucfirst($model->profile->role) : 'N/A') . '</div>'
-                                    . '<div>' . Html::encode($model->prato ? $model->prato->designacao : 'N/A') . '</div>'
-                                    . '<div>' . ($model->lido === null ? 'Não lido ainda' : Yii::$app->formatter->asTime($model->lido, 'php:H:i')) . '</div>'
-                                    . Html::a('Editar', ['senha/update', 'id' => $model->id], [
-                                        'class' => 'btn text-white',
-                                        'style' => 'background-color: transparent; border: 1px solid white; padding: 5px 10px; margin-right: 10px;'
-                                    ]);
-
-                                if ($model->anulado !== 1) {
-                                    $content .= Html::a('Anular', ['senha/anular', 'id' => $model->id], [
-                                        'class' => 'btn btn-danger',
-                                        'data' => [
-                                            'confirm' => 'Tem certeza que deseja anular esta senha?',
-                                            'method' => 'post',
-                                        ],
-                                    ]);
-                                }
-
-                                return $content . '</div></div>';
+                                return $this->render('_senhas', ['model' => $model]);
                             }, $senhaModels))
                             : '<p class="text-center" style="margin-top: 3vh">Sem agendamentos para o dia atual.</p>',
                         'active' => $cozinha->id == $activeCozaId,
@@ -83,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     </div>
 </div>
+
 
 <style>
     .cozinha-index {

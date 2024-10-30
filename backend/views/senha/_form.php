@@ -30,30 +30,9 @@ use yii\widgets\ActiveForm;
                 </div>
 
                 <div class="mb-3">
-                    <?= $form->field($model, 'valor')
-                        ->textInput(['maxlength' => false, 'class' => 'form-control'])
-                        ->label('Valor:', ['class' => 'form-label'])
-                    ?>
-                </div>
-
-                <div class="mb-3">
                     <?= $form->field($model, 'descricao')
                         ->textInput(['maxlength' => false, 'class' => 'form-control'])
                         ->label('Descrição:', ['class' => 'form-label'])
-                    ?>
-                </div>
-
-                <div class="mb-3">
-                    <?= $form->field($model, 'iva')
-                        ->dropDownList(
-                            [
-                                '6' => 'Taxa reduzida - 6%',
-                                '13' => 'Taxa intermédia - 13%',
-                                '23' => 'Taxa normal - 23%',
-                            ],
-                            ['prompt' => 'Selecione uma taxa.', 'class' => 'form-control dropdown-with-arrow']
-                        )
-                        ->label('Iva:', ['class' => 'form-label'])
                     ?>
                 </div>
 

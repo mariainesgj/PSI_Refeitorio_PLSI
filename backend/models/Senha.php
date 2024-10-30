@@ -43,15 +43,15 @@ class Senha extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['data', 'valor', 'descricao', 'iva', 'user_id', 'ementa_id', 'prato_id'], 'required'],
+            [['data', 'user_id', 'ementa_id', 'prato_id'], 'required'],
             [['data', 'criado', 'alterado' , 'lido'], 'safe'],
             [['anulado', 'consumido'], 'boolean'],
-            [['user_id', 'ementa_id', 'prato_id'], 'integer'],
-            [['valor', 'iva'], 'number'],
+            [['user_id', 'ementa_id', 'prato_id' , 'valor_id'], 'integer'],
             [['descricao'], 'string', 'max' => 255],
             [['ementa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ementa::class, 'targetAttribute' => ['ementa_id' => 'id']],
             [['prato_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prato::class, 'targetAttribute' => ['prato_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['valor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Valor::class, 'targetAttribute' => ['valor_id' => 'id']],
         ];
     }
 
@@ -67,13 +67,12 @@ class Senha extends \yii\db\ActiveRecord
             'consumido' => 'Consumido',
             'criado' => 'Criado',
             'alterado' => 'Alterado',
-            'valor' => 'Valor',
             'descricao' => 'Descricao',
-            'iva' => 'Iva',
             'user_id' => 'User ID',
             'ementa_id' => 'Ementa ID',
             'prato_id' => 'Prato ID',
-            'lido' => 'Lido'
+            'lido' => 'Lido',
+            'valor_id' => 'Valor'
         ];
     }
 
