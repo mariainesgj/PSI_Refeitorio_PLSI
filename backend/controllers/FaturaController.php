@@ -88,24 +88,42 @@ class FaturaController extends Controller
             $model->data = date('Y-m-d H:i:s');
 
             if ($model->save()) {
-
-                $senhas = $this->request->post('senhas');
+                // Aqui pegamos as senhas
+                $senhas = $this->request->post('senhas', []);
 
                 foreach ($senhas as $senhaData) {
-                    $linhaFatura = new Linhasfatura();
-                    $linhaFatura->fatura_id = $model->id;
-                    $linhaFatura->senha_id = $senhaData['id'];
-                    $linhaFatura->quantidade = $senhaData['quantidade'];
-                    $linhaFatura->preco = $senhaData['preco_sem_iva'];
-                    $linhaFatura->taxa_iva = $senhaData['taxa_iva'];
-                    $linhaFatura->save();
+                    if (isset($senhaData['id'], $senhaData['quantidade'], $senhaData['preco_sem_iva'], $senhaData['taxa_iva'])) {
+                        $linhaFatura = new Linhasfatura();
+                        $linhaFatura->fatura_id = $model->id;
+                        $linhaFatura->senha_id = $senhaData['id'];
+                        $linhaFatura->quantidade = $senhaData['quantidade'];
+                        $linhaFatura->preco = $senhaData['preco_sem_iva'];
+                        $linhaFatura->taxa_iva = $senhaData['taxa_iva'];
+
+                        if (!$linhaFatura->save()) {
+                            print_r($linhaFatura->errors);
+                            exit;
+                        }
+                    } else {
+                        echo "Dados da senha incompletos.";
+                    }
                 }
+
+                if (!empty($senhas)) {
+                    foreach ($senhas as $senhaData) {
+                        $senha = Senha::findOne($senhaData['id']);
+                        if ($senha) {
+                            $senha->pago = 1;
+                            $senha->save();
+                        }
+                    }
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
-            } else{
+            } else {
                 print_r($model->errors);
                 exit;
             }
-
         }
 
         return $this->render('create', [
@@ -114,6 +132,7 @@ class FaturaController extends Controller
             'utilizadores' => $utilizadores,
         ]);
     }
+
 
 
     /**

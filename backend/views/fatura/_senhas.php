@@ -7,7 +7,7 @@ $totalSemIva = 0;
 $totalIva = 0;
 
 if (empty($senhas)) {
-    echo "<tr><td colspan='5' style='text-align: center;'>Nenhuma senha encontrada.</td></tr>";
+    echo "<tr><td colspan='5' style='text-align: center;'>Sem senhas por pagar.</td></tr>";
 } else {
     foreach ($senhas as $senha) {
         echo "<tr>";
