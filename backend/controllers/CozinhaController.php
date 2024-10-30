@@ -44,20 +44,6 @@ class CozinhaController extends Controller
 
         $searchModel = new CozinhaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        /*$dataProvider = new ActiveDataProvider([
-            'query' => Cozinha::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-
-        ]);
-*/
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
