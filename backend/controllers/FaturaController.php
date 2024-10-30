@@ -81,16 +81,31 @@ class FaturaController extends Controller
         $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            // Recebe os totais do formulário
             $model->total_iliquido = $this->request->post('Fatura')['total_iliquido'];
             $model->total_iva = $this->request->post('Fatura')['total_iva'];
             $model->total_doc = $this->request->post('Fatura')['total_doc'];
             $model->user_id = $this->request->post('user_id');
+            $model->data = date('Y-m-d H:i:s');
 
-            // Salva a fatura
             if ($model->save()) {
+
+                $senhas = $this->request->post('senhas');
+
+                foreach ($senhas as $senhaData) {
+                    $linhaFatura = new Linhasfatura();
+                    $linhaFatura->fatura_id = $model->id;
+                    $linhaFatura->senha_id = $senhaData['id'];
+                    $linhaFatura->quantidade = $senhaData['quantidade'];
+                    $linhaFatura->preco = $senhaData['preco_sem_iva'];
+                    $linhaFatura->taxa_iva = $senhaData['taxa_iva'];
+                    $linhaFatura->save();
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
+            } else{
+                print_r($model->errors);
+                exit;
             }
+
         }
 
         return $this->render('create', [
@@ -99,9 +114,6 @@ class FaturaController extends Controller
             'utilizadores' => $utilizadores,
         ]);
     }
-
-
-
 
 
     /**

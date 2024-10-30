@@ -9,13 +9,13 @@ use Yii;
  *
  * @property int $id
  * @property int $quantidade
- * @property float $total
- * @property float $iva
+ * @property float $preco
+ * @property float $taxa_iva
  * @property int $fatura_id
  * @property int $senha_id
  *
- * @property Faturas $fatura
- * @property Senhas $senha
+ * @property Fatura $fatura
+ * @property Senha $senha
  */
 class Linhasfatura extends \yii\db\ActiveRecord
 {
@@ -33,11 +33,11 @@ class Linhasfatura extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantidade', 'total', 'iva', 'fatura_id', 'senha_id'], 'required'],
+            [['quantidade', 'preco', 'taxa_iva', 'fatura_id', 'senha_id'], 'required'],
             [['quantidade', 'fatura_id', 'senha_id'], 'integer'],
-            [['total', 'iva'], 'number'],
-            [['fatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faturas::class, 'targetAttribute' => ['fatura_id' => 'id']],
-            [['senha_id'], 'exist', 'skipOnError' => true, 'targetClass' => Senhas::class, 'targetAttribute' => ['senha_id' => 'id']],
+            [['preco', 'taxa_iva'], 'number'],
+            [['fatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Fatura::class, 'targetAttribute' => ['fatura_id' => 'id']],
+            [['senha_id'], 'exist', 'skipOnError' => true, 'targetClass' => Senha::class, 'targetAttribute' => ['senha_id' => 'id']],
         ];
     }
 
@@ -49,8 +49,8 @@ class Linhasfatura extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'quantidade' => 'Quantidade',
-            'total' => 'Total',
-            'iva' => 'Iva',
+            'preco' => 'Preço',
+            'taxa_iva' => 'Taxa de Iva',
             'fatura_id' => 'Fatura ID',
             'senha_id' => 'Senha ID',
         ];
@@ -63,7 +63,7 @@ class Linhasfatura extends \yii\db\ActiveRecord
      */
     public function getFatura()
     {
-        return $this->hasOne(Faturas::class, ['id' => 'fatura_id']);
+        return $this->hasOne(Fatura::class, ['id' => 'fatura_id']);
     }
 
     /**
@@ -73,6 +73,6 @@ class Linhasfatura extends \yii\db\ActiveRecord
      */
     public function getSenha()
     {
-        return $this->hasOne(Senhas::class, ['id' => 'senha_id']);
+        return $this->hasOne(Senha::class, ['id' => 'senha_id']);
     }
 }

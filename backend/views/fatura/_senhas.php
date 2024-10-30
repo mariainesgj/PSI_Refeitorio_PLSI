@@ -16,6 +16,11 @@ if (empty($senhas)) {
         echo "<td class='valor' style='text-align: center'>" . Html::encode($senha->valor ? number_format($senha->valor->valor, 2, ',', '.') : 'Valor não encontrado') . "</td>";
         echo "<td class='iva' style='text-align: center'>" . Html::encode($senha->valor ? number_format($senha->valor->iva , 2, ',', '.') : 'IVA não encontrado') . "</td>";
 
+        echo "<input type='hidden' name='senhas[{$senha->id}][id]' value='" . Html::encode($senha->id) . "'>";
+        echo "<input type='hidden' name='senhas[{$senha->id}][quantidade]' value='1'>";
+        echo "<input type='hidden' name='senhas[{$senha->id}][preco_sem_iva]' value='" . $senha->valor->valor . "'>";
+        echo "<input type='hidden' name='senhas[{$senha->id}][taxa_iva]' value='" . $senha->valor->iva . "'>";
+
         if ($senha->valor) {
             $valor = $senha->valor->valor;
             $iva = $senha->valor->iva;
