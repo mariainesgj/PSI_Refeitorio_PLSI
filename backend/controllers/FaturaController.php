@@ -5,6 +5,7 @@ namespace backend\controllers;
 use app\models\Fatura;
 use app\models\FaturaSearch;
 use app\models\Linhasfatura;
+use app\models\Movimento;
 use app\models\Profile;
 use app\models\Senha;
 use Yii;
@@ -88,8 +89,8 @@ class FaturaController extends Controller
             $model->data = date('Y-m-d H:i:s');
 
             if ($model->save()) {
-                // Aqui pegamos as senhas
                 $senhas = $this->request->post('senhas', []);
+                $numeroLinhas = 0;
 
                 foreach ($senhas as $senhaData) {
                     if (isset($senhaData['id'], $senhaData['quantidade'], $senhaData['preco_sem_iva'], $senhaData['taxa_iva'])) {
@@ -100,7 +101,9 @@ class FaturaController extends Controller
                         $linhaFatura->preco = $senhaData['preco_sem_iva'];
                         $linhaFatura->taxa_iva = $senhaData['taxa_iva'];
 
-                        if (!$linhaFatura->save()) {
+                        if ($linhaFatura->save()) {
+                            $numeroLinhas++;
+                        } else {
                             print_r($linhaFatura->errors);
                             exit;
                         }
@@ -119,6 +122,18 @@ class FaturaController extends Controller
                     }
                 }
 
+                $movimento = new Movimento();
+                $movimento->tipo = "credito";
+                $movimento->data = date('Y-m-d H:i:s');
+                $movimento->quantidade = $numeroLinhas;
+                $movimento->origem = $model->id;
+                $movimento->user_id = $model->user_id;
+
+                if (!$movimento->save()) {
+                    print_r($movimento->errors);
+                    exit;
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 print_r($model->errors);
@@ -132,6 +147,7 @@ class FaturaController extends Controller
             'utilizadores' => $utilizadores,
         ]);
     }
+
 
 
 
