@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
     <div class="container mt-6">
         <div class="row d-flex align-items-center">
             <div class="col-md-6">
-                <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Definir ementa</h4>
+                <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Definir prato</h4>
                 <?php $form = ActiveForm::begin(['options' => ['class' => 'needs-validation', 'novalidate' => true]]); ?>
 
                 <div class="mb-3">

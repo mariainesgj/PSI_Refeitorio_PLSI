@@ -46,6 +46,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'table table-bordered rounded-table',
                 'style' => 'border-collapse: separate; border-spacing: 0;'
             ],
+            'pager' => [
+                'options' => [
+                    'class' => 'pagination justify-content-center',
+                ],
+                'linkOptions' => [
+                    'class' => 'page-link',
+                ],
+                'activePageCssClass' => 'active',
+            ],
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 [
@@ -90,6 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
 
+
         <p class="text-center">
             <?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
         </p>
@@ -128,6 +138,17 @@ $this->params['breadcrumbs'][] = $this->title;
     .rounded-table tr {
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
+
+     .pagination .page-item {
+         margin: 0 5px;
+     }
+
+    .pagination .page-link {
+        padding: 8px 12px;
+    }
+</style>
+
+
 
 </style>
 
