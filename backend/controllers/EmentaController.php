@@ -117,10 +117,18 @@ class EmentaController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $pratos = Prato::find()->all();
+        $cozinhas = Cozinha::find()->all();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'pratos' => $pratos,
+            'cozinhas' => $cozinhas,
         ]);
     }
+
 
     /**
      * Creates a new Ementa model.
