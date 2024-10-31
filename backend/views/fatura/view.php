@@ -6,14 +6,13 @@ use yii\helpers\Html;
 /** @var app\models\Fatura $model */
 /** @var array $utilizadores */
 
-$this->title = 'Detalhes da Fatura #' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Faturas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="fatura-view">
     <div class="container mt-6" style="max-width: 1200px;">
-        <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Fatura</h4>
+        <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Fatura nº <?=$model->id?></h4>
 
         <div class="data-container">
             <table style="width: 100%; border-collapse: collapse;">

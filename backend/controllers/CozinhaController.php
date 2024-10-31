@@ -113,12 +113,16 @@ class CozinhaController extends Controller
     {
         $model = $this->findModel($id);
 
+        $funcionarios = Profile::find()->where(['role' => 'funcionario'])->all();
+        $funcionariosList = \yii\helpers\ArrayHelper::map($funcionarios, 'id', 'name');
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'funcionariosList' => $funcionariosList,
         ]);
     }
 
