@@ -25,8 +25,8 @@ $totalIva = 0;
             <div class="data-container">
                 <table style="width: 100%; border-collapse: collapse;">
                     <tr>
-                        <td style="width: 50%; padding-right: 5px;">
-                            <img src="<?= Yii::getAlias('@web/images/logo.png') ?>" alt="Imagem ilustrativa" class="img-fluid" style="width: 20vw">
+                        <td style="width: 50%; padding-left: 3vw">
+                            <img src="<?= Yii::getAlias('@web/images/logo.png') ?>" alt="Imagem ilustrativa" class="img-fluid" style="width: 18vw">
                         </td>
                         <td style="width: 50%; padding-left: 5px;">
                             <div class="mb-3">
@@ -68,10 +68,12 @@ $totalIva = 0;
                 <input type="hidden" id="inputTotalIva" name="Fatura[total_iva]">
                 <input type="hidden" id="inputTotalValor" name="Fatura[total_doc]">
 
-                <div style="text-align: right; margin-top: 20px; border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
+                <div style="margin-top: 7vh; text-align: right;">
+                    <div style="display: inline-block; border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
                     <p id="totalSemIva">Total Ilíquido: <?= Html::encode(number_format($totalSemIva, 2, ',', '.')) ?></p>
                     <p id="totalIva">Total IVA: <?= Html::encode(number_format($totalIva, 2, ',', '.')) ?></p>
                     <p id="totalValor">Total Documento: <?= Html::encode(number_format($totalValor, 2, ',', '.')) ?></p>
+                    </div>
                 </div>
 
                 <div class="form-group text-center">

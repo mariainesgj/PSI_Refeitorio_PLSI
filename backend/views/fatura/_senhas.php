@@ -19,7 +19,7 @@ if (empty($senhas)) {
         echo "<input type='hidden' name='senhas[{$senha->id}][id]' value='" . Html::encode($senha->id) . "'>";
         echo "<input type='hidden' name='senhas[{$senha->id}][quantidade]' value='1'>";
         echo "<input type='hidden' name='senhas[{$senha->id}][preco_sem_iva]' value='" . $senha->valor->valor . "'>";
-        echo "<input type='hidden' name='senhas[{$senha->id}][taxa_iva]' value='" . $senha->valor->iva . "'>";
+        echo "<input type='hidden' name='senhas[{$senha->id}][taxa_iva]' value='" . $senha->valor->iva . "%'>";
 
         if ($senha->valor) {
             $valor = $senha->valor->valor;

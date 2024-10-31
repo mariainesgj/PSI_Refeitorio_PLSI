@@ -61,10 +61,16 @@ class FaturaController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $senhas = $model->getLinhasfaturas()->where(['fatura_id' => $id])->all();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'senhas' => $senhas,
         ]);
     }
+
 
     /**
      * Creates a new Fatura model.
