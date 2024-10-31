@@ -11,7 +11,6 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="cozinha-update">
-
     <?= $this->render('_form', [
         'model' => $model,
         'funcionariosList' => $funcionariosList,

@@ -68,9 +68,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         $menuContent .= '<span class="text-line date-line" style="text-decoration: underline;">' . Yii::$app->formatter->asDate($day, 'php:D, d M Y') . '</span>';
 
                         if ($menu !== null) {
-                            $menuContent .= '<span class="text-line dish-line">Sopa: ' . Html::encode($pratos[$menu->sopa]->designacao ?? 'N/A') . '</span>';
-                            $menuContent .= '<span class="text-line dish-line">Menu Principal: ' . Html::encode($pratos[$menu->prato_normal]->designacao ?? 'N/A') . '</span>';
-                            $menuContent .= '<span class="text-line dish-line">Menu Vegetariano: ' . Html::encode($pratos[$menu->prato_vegetariano]->designacao ?? 'N/A') . '</span>';
+                            $menuContent .= Html::a(
+                                '<p class="text-line dish-line">Sopa: ' . Html::encode($pratos[$menu->sopa]->designacao ?? 'N/A') . '</p>' .
+                                '<p class="text-line dish-line">Menu Principal: ' . Html::encode($pratos[$menu->prato_normal]->designacao ?? 'N/A') . '</p>' .
+                                '<p class="text-line dish-line">Menu Vegetariano: ' . Html::encode($pratos[$menu->prato_vegetariano]->designacao ?? 'N/A') . '</p>',
+                                ['ementa/view', 'id' => $menu->id],
+                                ['class' => 'menu-link', 'style' => 'color: white; text-decoration: none;']
+                            );
                         } else {
                             $menuContent .= '<div class="date-line">';
                             $menuContent .= '<img src="' . Yii::getAlias('@web/images/img.png') . '" alt="Imagem ilustrativa" class="img-fluid" style="width: 7vw"><br>';
@@ -89,7 +93,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </svg>
                                 </a>
                             </div>';
-
 
                     $menuContent .= '</div>';
 
@@ -153,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
         background-color: #3b99ff;
         color: white;
         width: 50vw;
-        min-height: 26vh;
+        min-height: 27vh;
         display: flex;
         align-items: start;
         justify-content: start;
