@@ -11,7 +11,7 @@ use yii\helpers\Html;
         <div><?= Html::encode($model->prato ? $model->prato->designacao : 'N/A') ?></div>
         <div><?= $model->lido === null ? 'Não lido ainda' : Yii::$app->formatter->asTime($model->lido, 'php:H:i') ?></div>
 
-        <?= Html::a('Editar', ['senha/update', 'id' => $model->id], [
+        <?= Html::a('Visualizar', ['senha/view', 'id' => $model->id], [
             'class' => 'btn text-white',
             'style' => 'background-color: transparent; border: 1px solid white; padding: 5px 10px; margin-right: 10px;'
         ]) ?>
