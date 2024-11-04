@@ -204,20 +204,20 @@ class SiteController extends Controller
             if ($affectedRows === 0) {
                 throw new \Exception("Nenhuma reserva encontrada para o ID fornecido.");
             }
+            $userId = Yii::$app->db->createCommand("SELECT user_id FROM senhas WHERE id = :id")
+                ->bindValue(':id', $id)
+                ->queryScalar();
+
 
             return [
                 'success' => true,
                 'message' => 'Senha atualizada com sucesso',
-                'user_id' => Yii::$app->user->identity->id
+                'user_id' => $userId
             ];
         } catch (\Exception $e) {
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
-
-
-
-
 
 
     /**

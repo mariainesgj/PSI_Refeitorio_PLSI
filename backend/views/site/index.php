@@ -166,7 +166,7 @@ $this->title = 'My Yii Application';
             body: JSON.stringify({ id: idReserva })
         })
 
-                .then(response => response.json())
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     document.getElementById('user-id').textContent = data.user_id;
