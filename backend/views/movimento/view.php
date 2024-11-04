@@ -5,9 +5,6 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Movimento $model */
 
-$this->title = 'Movimento: ' . $model->id . '-' . Yii::$app->formatter->asDate($model->data, 'php:Y/m/d');
-$this->params['breadcrumbs'][] = ['label' => 'Cozinhas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 $labelOrigem = '';
 $labelTipo = '';
 

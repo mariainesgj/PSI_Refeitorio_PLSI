@@ -5,9 +5,6 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Ementa $model */
 
-$this->title = 'Detalhes da Ementa ' . Yii::$app->formatter->asDate($model->data, 'php:Y/m/d');
-$this->params['breadcrumbs'][] = ['label' => 'Ementas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="ementa-view">

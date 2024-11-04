@@ -6,8 +6,6 @@ use yii\helpers\Html;
 /** @var app\models\Fatura $model */
 /** @var array $utilizadores */
 
-$this->params['breadcrumbs'][] = ['label' => 'Faturas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="fatura-view">

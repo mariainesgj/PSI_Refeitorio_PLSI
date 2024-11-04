@@ -5,9 +5,6 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Cozinha $model */
 
-$this->title = 'Detalhes da Cozinha: ' . $model->designacao;
-$this->params['breadcrumbs'][] = ['label' => 'Cozinhas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="my-form">
     <div class="container mt-6">

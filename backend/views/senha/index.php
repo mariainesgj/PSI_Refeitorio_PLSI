@@ -8,8 +8,6 @@ use yii\helpers\Html;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 /** @var app\models\SenhaSearch $searchModel */
 
-$this->title = 'Senhas';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 

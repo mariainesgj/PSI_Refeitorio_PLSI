@@ -5,9 +5,6 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Senha $model */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Senhas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="my-form">

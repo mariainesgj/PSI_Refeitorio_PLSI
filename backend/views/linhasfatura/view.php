@@ -6,9 +6,6 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\Linhasfatura $model */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Linhasfaturas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="linhasfatura-view">

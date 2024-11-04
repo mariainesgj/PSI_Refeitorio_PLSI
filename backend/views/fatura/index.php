@@ -9,8 +9,6 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Faturas';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cozinha-index">
     <div class="container mt-4">
@@ -37,7 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 
-        <!-- Mostrar o GridView somente se houver um searchTerm -->
         <?php if (!empty($searchModel->searchTerm)): ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
