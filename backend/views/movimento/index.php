@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'table table-bordered rounded-table',
                 'style' => 'border-collapse: separate; border-spacing: 0;'
             ],
+            'emptyText' => 'Sem movimentos para mostrar.',
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 [

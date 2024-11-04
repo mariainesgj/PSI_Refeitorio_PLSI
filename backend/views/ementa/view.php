@@ -35,8 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="mb-3">
-                    <label for="cozinha" style="font-size: 17px; padding-bottom: 0.5vh">Cozinha Associada:</label>
-                    <input type="text" id="cozinha" class="form-control rounded-input" value="<?= Html::encode($model->cozinha_id ? $cozinhas[$model->cozinha_id]->designacao : 'N/A') ?>" readonly>
+                    <label for="sopa" style="font-size: 17px; padding-bottom: 0.5vh">Cozinha Associada:</label>
+                    <input type="text" id="cozinha" class="form-control rounded-input" value="<?= Html::encode($cozinha ? $cozinha->designacao : 'N/A') ?>" readonly>
                 </div>
 
                 <div class="form-group text-center">

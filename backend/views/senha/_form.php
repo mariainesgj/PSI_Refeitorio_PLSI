@@ -89,7 +89,7 @@ $(document).ready(function() {
     var data = $('#senha-hidden-data').val() || $('#senha-data').val();
     
     if (userId && data) {
-        console.log("Carregando ementa e pratos no modo de edição para user_id: " + userId + " e data: " + data);
+        console.log("A carregaar a  ementa e pratos na vista update para user_id: " + userId + " e data: " + data);
         fetchCozinhaIdAndEmenta(userId, data);
     }
 
@@ -161,11 +161,14 @@ function fetchEmentaId(cozinhaId, data) {
 }
 
 
-$('form').on('submit', function(event) {
-        event.preventDefault(); 
-        console.log("Dados do formulário:", $(this).serialize());
-        this.submit();
-    });
+$('form').on('submit', function(event) { //Impede enviar o formulário mais que uma vez (bug fixed: permitia vários registos) 
+    event.preventDefault();
+    var form = this;
+    $(this).find(':submit').prop('disabled', true);
+    console.log("Dados do formulário:", $(this).serialize());
+    form.submit();
+});
+
 
 JS;
 $this->registerJs($script);

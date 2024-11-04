@@ -104,7 +104,8 @@ class SenhaController extends Controller
         $model = new Senha();
 
         $utilizadores = Profile::find()->where(['role' => ['aluno', 'professor']])->all();
-        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
+        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'user_id', 'name');
+
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
@@ -132,7 +133,7 @@ class SenhaController extends Controller
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        $profile = Profile::find()->where(['id' => $id])->one();
+        $profile = Profile::find()->where(['user_id' => $id])->one();
 
         if ($profile) {
             return ['cozinha_id' => $profile->cozinha_id];
@@ -155,7 +156,7 @@ class SenhaController extends Controller
         $model = $this->findModel($id);
 
         $utilizadores = Profile::find()->where(['role' => ['aluno', 'professor']])->all();
-        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
+        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'user_id', 'name');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

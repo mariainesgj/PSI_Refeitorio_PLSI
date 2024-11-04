@@ -1,41 +1,73 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Movimento $model */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Movimentos', 'url' => ['index']];
+$this->title = 'Movimento: ' . $model->id . '-' . Yii::$app->formatter->asDate($model->data, 'php:Y/m/d');
+$this->params['breadcrumbs'][] = ['label' => 'Cozinhas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+$labelOrigem = '';
+$labelTipo = '';
+
+if($model->tipo == 'credito'){
+    $labelOrigem = 'Origem Fatura nº';
+    $labelTipo = 'Crédito';
+} else{
+    $labelOrigem = 'Origem Senha nº';
+    $labelTipo = 'Débito';
+}
 ?>
-<div class="movimento-view">
+<div class="my-form">
+    <div class="container mt-6">
+        <div class="row d-flex align-items-center">
+            <div class="col-md-6">
+                <div class="mb-4">
+                    <?= Html::a('Voltar', ['index'], ['class' => 'btn btn-secondary']) ?>
+                </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+                <div class="mb-3">
+                    <label for="tipo" style="font-size: 17px; padding-bottom: 0.5vh">Tipo:</label>
+                    <input type="text" id="tipo" class="form-control rounded-input" value="<?= Html::encode($labelTipo) ?>" readonly>
+                </div>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+                <div class="mb-3">
+                    <label for="quantidade" style="font-size: 17px; padding-bottom: 0.5vh">Quantidade:</label>
+                    <input type="text" id="quantidade" class="form-control rounded-input" value="<?= Html::encode($model->quantidade) ?>" readonly>
+                </div>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'tipo',
-            'data',
-            'quantidade',
-            'origem',
-            'user_id',
-        ],
-    ]) ?>
+                <div class="mb-3">
+                    <label for="origem" style="font-size: 17px; padding-bottom: 0.5vh"><?= Html::encode($labelOrigem) ?></label>
+                    <input type="text" id="origem" class="form-control rounded-input" value="<?= Html::encode($model->origem) ?>" readonly>
+                </div>
 
+                <div class="mb-3">
+                    <label for="origem" style="font-size: 17px; padding-bottom: 0.5vh">Utilizador:</label>
+                    <input type="text" id="origem" class="form-control rounded-input" value="<?= Html::encode($model->user_id) ?>" readonly>
+                </div>
+            </div>
+
+            <div class="text-center col-md-6">
+                <img src="<?= Yii::getAlias('@web/images/coins.png') ?>" alt="Imagem ilustrativa" class="img-fluid" style="width: 20vw">
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .my-form {
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .rounded-input {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+        width: 90%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+</style>

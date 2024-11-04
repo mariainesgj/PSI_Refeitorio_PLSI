@@ -120,12 +120,12 @@ class EmentaController extends Controller
         $model = $this->findModel($id);
 
         $pratos = Prato::find()->all();
-        $cozinhas = Cozinha::find()->all();
+        $cozinha = Cozinha::findOne($model->cozinha_id);
 
         return $this->render('view', [
             'model' => $model,
             'pratos' => $pratos,
-            'cozinhas' => $cozinhas,
+            'cozinha' => $cozinha,
         ]);
     }
 

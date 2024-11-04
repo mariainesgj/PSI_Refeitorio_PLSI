@@ -46,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'table table-bordered rounded-table',
                 'style' => 'border-collapse: separate; border-spacing: 0;'
             ],
+            'emptyText' => 'Nenhum prato encontrado.',
             'pager' => [
                 'options' => [
                     'class' => 'pagination justify-content-center',
