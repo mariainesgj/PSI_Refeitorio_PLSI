@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use app\models\Cozinha;
+use app\models\Senha;
 use common\models\LoginForm;
 use Yii;
 use yii\filters\VerbFilter;
@@ -60,10 +62,122 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($activeCozaId = null)
     {
-        return $this->render('index');
+        $cozinhas = Cozinha::find()->all();
+
+        $porServirNormal = 0;
+        $servidasNormal = 0;
+        $porServirVegetariano = 0;
+        $servidasVegetariano = 0;
+        $porServirTotal = 0;
+        $servidasTotal = 0;
+
+        if ($activeCozaId === null && !empty($cozinhas)) {
+            $activeCozaId = $cozinhas[0]->id;
+        }
+
+        if ($activeCozaId) {
+            $porServirNormal = $this->calcularPorServirNormal($activeCozaId);
+            $servidasNormal = $this->calcularServidasNormal($activeCozaId);
+            $porServirVegetariano = $this->calcularPorServirVegetariano($activeCozaId);
+            $servidasVegetariano = $this->calcularServidasVegetariano($activeCozaId);
+            $porServirTotal = $this->calcularPorServirTotal($activeCozaId);
+            $servidasTotal = $this->calcularServidasTotal($activeCozaId);
+        }
+
+        return $this->render('index', [
+            'cozinhas' => $cozinhas,
+            'activeCozaId' => $activeCozaId,
+            'porServirNormal' => $porServirNormal,
+            'servidasNormal' => $servidasNormal,
+            'porServirVegetariano' => $porServirVegetariano,
+            'servidasVegetariano' => $servidasVegetariano,
+            'porServirTotal' => $porServirTotal,
+            'servidasTotal' => $servidasTotal
+        ]);
     }
+
+    protected function calcularPorServirNormal($cozinhaId)
+    {
+        $dataAtual = date('Y-m-d');
+
+        $query = Senha::find()
+            ->joinWith(['prato', 'ementa'])
+            ->where(['ementas.cozinha_id' => $cozinhaId])
+            ->andWhere(['senhas.consumido' => 0])
+            ->andWhere(['pratos.tipo' => 'prato normal'])
+            ->andWhere(['date(senhas.data)' => $dataAtual]);
+
+        return $query->count();
+    }
+
+    protected function calcularServidasNormal($cozinhaId)
+    {
+        $dataAtual = date('Y-m-d');
+
+        return Senha::find()
+            ->joinWith(['prato', 'ementa'])
+            ->where(['ementas.cozinha_id' => $cozinhaId])
+            ->andWhere(['senhas.consumido' => 1])
+            ->andWhere(['pratos.tipo' => 'prato normal'])
+            ->andWhere(['date(senhas.data)' => $dataAtual])
+            ->count();
+    }
+
+
+    protected function calcularPorServirVegetariano($cozinhaId)
+    {
+        $dataAtual = date('Y-m-d');
+
+        $query = Senha::find()
+            ->joinWith(['prato', 'ementa'])
+            ->where(['ementas.cozinha_id' => $cozinhaId])
+            ->andWhere(['senhas.consumido' => 0])
+            ->andWhere(['pratos.tipo' => 'prato vegetariano'])
+            ->andWhere(['date(senhas.data)' => $dataAtual]);
+
+        return $query->count();
+    }
+
+    protected function calcularServidasVegetariano($cozinhaId)
+    {
+        $dataAtual = date('Y-m-d');
+
+        return Senha::find()
+            ->joinWith(['prato', 'ementa'])
+            ->where(['ementas.cozinha_id' => $cozinhaId])
+            ->andWhere(['senhas.consumido' => 1])
+            ->andWhere(['pratos.tipo' => 'prato vegetariano'])
+            ->andWhere(['date(senhas.data)' => $dataAtual])
+            ->count();
+    }
+
+    protected function calcularPorServirTotal($cozinhaId)
+    {
+        $dataAtual = date('Y-m-d');
+
+        $query = Senha::find()
+            ->joinWith(['ementa'])
+            ->where(['ementas.cozinha_id' => $cozinhaId])
+            ->andWhere(['senhas.consumido' => 0])
+            ->andWhere(['date(senhas.data)' => $dataAtual]);
+
+        return $query->count();
+    }
+
+    protected function calcularServidasTotal($cozinhaId)
+    {
+        $dataAtual = date('Y-m-d');
+
+        return Senha::find()
+            ->joinWith(['ementa'])
+            ->where(['ementas.cozinha_id' => $cozinhaId])
+            ->andWhere(['senhas.consumido' => 1])
+            ->andWhere(['date(senhas.data)' => $dataAtual])
+            ->count();
+    }
+
 
     /**
      * Login action.
