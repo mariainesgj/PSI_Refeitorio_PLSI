@@ -34,16 +34,23 @@ class SiteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['update-reserva'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
+                    'update-reserva' => ['post'],
                 ],
             ],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -177,6 +184,40 @@ class SiteController extends Controller
             ->andWhere(['date(senhas.data)' => $dataAtual])
             ->count();
     }
+
+    public function actionUpdateReserva()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        try {
+            $data = json_decode(Yii::$app->request->getRawBody(), true);
+            $id = $data['id'] ?? null;
+
+            if ($id === null) {
+                throw new \Exception("ID da reserva não fornecido.");
+            }
+
+            $affectedRows = Yii::$app->db->createCommand()
+                ->update('senhas', ['consumido' => 1], ['id' => $id])
+                ->execute();
+
+            if ($affectedRows === 0) {
+                throw new \Exception("Nenhuma reserva encontrada para o ID fornecido.");
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Senha atualizada com sucesso',
+                'user_id' => Yii::$app->user->identity->id
+            ];
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+
+
+
 
 
     /**

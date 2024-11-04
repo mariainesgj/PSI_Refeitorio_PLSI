@@ -41,6 +41,11 @@ $this->title = 'My Yii Application';
         <?php else: ?>
             <p class="text-center">Nenhuma cozinha encontrada.</p>
         <?php endif; ?>
+        <?= Html::input('text', 'qrCodeInput', '', [
+            'id' => 'qr-code-input',
+            'class' => 'form-control',
+            'style' => 'opacity: 0;'
+        ]); ?>
 
         <?php ActiveForm::end(); ?>
         <div class="row justify-content-center" style="padding-top: 5vh">
@@ -143,4 +148,65 @@ $this->title = 'My Yii Application';
     </div>
 
 
+    <div id="user-id-container" style="display:none; margin-top: 20px;">
+        <p>User ID da Reserva: <span id="user-id"></span></p>
+    </div>
+
 </div>
+
+<script>
+
+    function atualizarReserva(idReserva) {
+        fetch('<?= \yii\helpers\Url::to(['site/update-reserva']) ?>', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': '<?= Yii::$app->request->csrfToken ?>'
+            },
+            body: JSON.stringify({ id: idReserva })
+        })
+
+                .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('user-id').textContent = data.user_id;
+                    document.getElementById('user-id-container').style.display = 'block';
+                } else {
+                    alert(data.message || 'Erro ao atualizar a reserva.');
+                }
+            })
+            .catch(error => console.error('Erro ao atualizar a reserva:', error));
+    }
+
+    document.getElementById('qr-code-input').addEventListener('input', function() {
+        const base64Data = this.value;
+        console.log('Valor recebido do input:', base64Data);
+
+        if (!base64Data) {
+            console.error('O campo de input está vazio.');
+            return;
+        }
+
+        try {
+            const jsonString = atob(base64Data);
+            console.log('Valor decodificado:', jsonString);
+
+            const data = JSON.parse(jsonString);
+            const idReserva = data.id;
+            console.log('ID da reserva:', idReserva);
+            atualizarReserva(idReserva);
+        } catch (e) {
+            console.error('Erro ao decodificar ou processar o JSON:', e);
+        }
+    });
+
+    document.getElementById('qr-code-input').addEventListener('blur', function() {
+        this.dispatchEvent(new Event('input'));
+    });
+
+    setInterval(function() {
+        const qrInput = document.getElementById('qr-code-input');
+        qrInput.focus();
+        qrInput.select();
+    }, 1000);
+</script>
