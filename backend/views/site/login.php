@@ -7,26 +7,28 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-$this->title = 'Login';
+$this->title = 'Refeitório';
 ?>
 <div class="site-login">
-    <div class="mt-5 offset-lg-3 col-lg-6">
-        <h1><?= Html::encode($this->title) ?></h1>
+    <div class="container mt-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1><?= Html::encode($this->title) ?></h1>
+                <p>Preencha os campos para efetuar login:</p>
 
-        <p>Please fill out the following fields to login:</p>
+                <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <?= $form->field($model, 'password')->passwordInput() ?>
 
-        <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-            <?= $form->field($model, 'password')->passwordInput() ?>
-
-            <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-            <div class="form-group">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
+                <div class="form-group" style="text-align: center">
+                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
+                </div>
+                <?php ActiveForm::end(); ?>
             </div>
 
-        <?php ActiveForm::end(); ?>
+            <div class="col-lg-6 text-center">
+                <img src="<?= Yii::getAlias('@web/images/logo.png') ?>" alt="Logótipo" class="img-fluid" style="width: 30vw;">
+            </div>
+        </div>
     </div>
 </div>

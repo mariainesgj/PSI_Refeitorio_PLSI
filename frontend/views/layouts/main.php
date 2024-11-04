@@ -31,32 +31,48 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
+            'class' => 'navbar navbar-expand-md navbar-dark bg-primary fixed-top'
         ],
     ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
+
+    $userId = Yii::$app->user->id;
+
+    $menuItems = [];
+
+    if (!Yii::$app->user->isGuest) {
+        $menuItems[] = ['label' => 'Agendar refeição', 'url' => ['/ementa/index']];
+
+        $menuItems[] = [
+            'label' => 'Faturas',
+            'items' => [
+                ['label' => 'Consultar Faturas', 'url' => ['/fatura/index']],
+                ['label' => 'Consultar Movimentos', 'url' => ['/movimento/index']],
+            ],
+        ];
+        $menuItems[] = ['label' => 'Os meus dados', 'url' => ['/profile/view', 'user_id' => $userId]];
+    }
+
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Criar conta', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     }
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav me-auto mb-2 mb-md-0'],
         'items' => $menuItems,
     ]);
+
     if (Yii::$app->user->isGuest) {
-        echo Html::tag('div',Html::a('Login',['/site/login'],['class' => ['btn btn-link login text-decoration-none']]),['class' => ['d-flex']]);
+        echo Html::tag('div', Html::a('Login', ['/site/login'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
     } else {
         echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                'Logout (' . Html::encode(Yii::$app->user->identity->username) . ')',
                 ['class' => 'btn btn-link logout text-decoration-none']
             )
             . Html::endForm();
     }
+
     NavBar::end();
     ?>
 </header>
@@ -81,4 +97,4 @@ AppAsset::register($this);
 <?php $this->endBody() ?>
 </body>
 </html>
-<?php $this->endPage();
+<?php $this->endPage(); ?>
