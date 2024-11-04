@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use app\models\Cozinha;
 use app\models\Profile;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -63,10 +64,20 @@ class ProfileController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+
+    public function actionView($user_id)
     {
+        $model = Profile::find()->where(['user_id' => $user_id])->one();
+
+        if ($model === null) {
+            throw new NotFoundHttpException("Perfil não encontrado.");
+        }
+
+        $cozinha = Cozinha::find()->where(['id' => $model->cozinha_id])->one();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'cozinha' => $cozinha
         ]);
     }
 
@@ -103,12 +114,16 @@ class ProfileController extends Controller
     {
         $model = $this->findModel($id);
 
+        $cozinhas = Cozinha::find()->all();
+        $cozinhasList = \yii\helpers\ArrayHelper::map($cozinhas , 'id' , 'designacao');
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'cozinhasList' => $cozinhasList,
         ]);
     }
 

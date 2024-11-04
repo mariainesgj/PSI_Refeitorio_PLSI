@@ -34,6 +34,9 @@ AppAsset::register($this);
             'class' => 'navbar navbar-expand-md navbar-dark bg-primary fixed-top'
         ],
     ]);
+
+    $userId = Yii::$app->user->id;
+
     $menuItems = [
         ['label' => 'Cozinhas', 'url' => ['/cozinha/index']],
         ['label' => 'Ementas', 'url' => ['/ementa/index']],
@@ -47,6 +50,7 @@ AppAsset::register($this);
                 ['label' => 'Consultar Movimentos', 'url' => ['/movimento/index']],
             ],
         ],
+        ['label' => 'Os meus dados', 'url' => ['/profile/view', 'user_id' => $userId]],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
