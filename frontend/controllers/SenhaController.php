@@ -151,6 +151,15 @@ class SenhaController extends Controller
     {
         $model = $this->findModel($id);
 
+        $userId = Yii::$app->user->id;
+
+        $profile = \app\models\Profile::find()->where(['user_id' => $userId])->one();
+        if ($profile) {
+            $cozinhaId = $profile->cozinha_id;
+
+            $model->user_id = $userId;
+        }
+
         $utilizadores = Profile::find()->where(['role' => ['aluno', 'professor']])->all();
         $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'user_id', 'name');
 
@@ -160,7 +169,9 @@ class SenhaController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'utilizadoresList' => $utilizadoresList
+            'utilizadoresList' => $utilizadoresList,
+            'cozinhaId' => $cozinhaId,
+            'userId' => $userId
         ]);
     }
 

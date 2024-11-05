@@ -26,9 +26,6 @@ use yii\helpers\Url;
                         </div>
                     </div>
                 </div>
-
-
-
             <?php endforeach; ?>
         <?php else: ?>
             <p class="text-center">Sem movimentos para mostrar.</p>

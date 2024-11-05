@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use app\models\Cozinha;
 use app\models\Ementa;
 use app\models\Prato;
+use app\models\Senha;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -78,7 +79,6 @@ class SiteController extends Controller
      */
 
     public function actionIndex() {
-
         $userId = Yii::$app->user->id;
         $profile = \app\models\Profile::find()->where(['user_id' => $userId])->one();
 
@@ -110,6 +110,13 @@ class SiteController extends Controller
             $menus[$date] = $ementa ?? null;
         }
 
+        $senhas = [];
+        foreach ($weekDays as $date) {
+            $senha = Senha::find()->where(['data' => $date, 'user_id' => $userId])->one();
+            $senhas[$date] = $senha !== null;
+        }
+
+
         return $this->render('index', [
             'cozinha' => $cozinha,
             'weekDays' => $weekDays,
@@ -117,8 +124,10 @@ class SiteController extends Controller
             'pratos' => $pratos,
             'userName' => $userName,
             'currentWeekStart' => $weekStart->format('Y-m-d'),
+            'senhas' => $senhas,
         ]);
     }
+
 
     /**
      * Logs in a user.

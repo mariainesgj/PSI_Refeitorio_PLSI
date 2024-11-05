@@ -1,12 +1,12 @@
 <div class="site-index">
-    <div class="p-5 mb-4 bg-transparent rounded-3">
-        <div class="container-fluid py-5 text-center">
+    <div class="p-5 mb-2 bg-transparent rounded-3">
+        <div class="container-fluid text-center">
             <?php use yii\helpers\Html;
             use yii\helpers\Url;
 
             if (!Yii::$app->user->isGuest) { ?>
                 <div class="jumbotron text-center bg-transparent">
-                    <h4>Bem vindo/a, <?= Html::encode($userName) ?>!</h4><br>
+                    <h4 class="mb-3">Bem-vindo/a, <?= Html::encode($userName) ?>!</h4>
                 </div>
             <?php } ?>
         </div>
@@ -14,14 +14,13 @@
 
     <div class="body-content">
         <div class="ementa-semana">
-            <div class="container mt-4">
+            <div class="container mt-3">
                 <?php
                 $previousWeek = (new \DateTime($currentWeekStart))->modify('-7 days')->format('Y-m-d');
                 $nextWeek = (new \DateTime($currentWeekStart))->modify('+7 days')->format('Y-m-d');
                 ?>
 
-                <div class="navigation-row d-flex justify-content-between align-items-center mt-4">
-
+                <div class="navigation-row d-flex justify-content-between align-items-center mt-2">
                     <div class="arrow-left">
                         <a href="<?= Url::to(['site/index', 'week_start' => $previousWeek]) ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b99ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -33,8 +32,11 @@
 
                     <div class="blue-containers-row d-flex justify-content-around flex-grow-1 mx-2">
                         <?php foreach ($weekDays as $day): ?>
-                            <?php $menu = $menus[$day] ?? null; ?>
-                            <div class="blue-container">
+                            <?php
+                            $menu = $menus[$day] ?? null;
+                            $hasSenha = !empty($senhas[$day]);
+                            ?>
+                            <div class="blue-container <?= $hasSenha ? 'bg-blue' : 'bg-light-gray' ?>">
                                 <span class="text-line date-line" style="text-decoration: underline;">
                                     <?= Yii::$app->formatter->asDate($day, 'php:D, d M Y') ?>
                                 </span>
@@ -65,13 +67,17 @@
                             </svg>
                         </a>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
     <style>
+        .p-5, .jumbotron {
+            padding: 1rem !important;
+            margin-bottom: 0.5vw;
+        }
+
         .ementa-semana {
             background-color: #f8f9fa;
             border-radius: 5px;
@@ -95,7 +101,6 @@
         }
 
         .blue-container {
-            background-color: #3b99ff;
             color: white;
             width: 12.5vw;
             min-height: 27vh;
@@ -106,6 +111,14 @@
             flex-direction: column;
             padding: 10px;
             overflow-wrap: break-word;
+        }
+
+        .bg-blue {
+            background-color: #3b99ff;
+        }
+
+        .bg-light-gray {
+            background-color: #d3d3d3;
         }
 
         .text-line {

@@ -27,8 +27,8 @@ use yii\widgets\ActiveForm;
 
                 <div class="mb-3">
                     <?= $form->field($model, 'descricao')
-                        ->textInput(['maxlength' => false, 'class' => 'form-control'])
-                        ->label('Descrição:', ['class' => 'form-label'])
+                        ->textInput(['maxlength' => false, 'class' => 'form-control', 'value' => $model->descricao === '' ? 'Sem descrição' : ''])
+                        ->label('Descrição:', ['class' => 'form-label']);
                     ?>
                 </div>
 

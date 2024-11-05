@@ -1,10 +1,15 @@
 <?php
 
 use yii\helpers\Html;
+use app\models\Senha;
 
 /** @var yii\web\View $this */
 /** @var app\models\Ementa $model */
 
+// Verifica se o usuário já possui uma senha para a data da ementa
+$senhaExistente = Senha::find()
+    ->where(['user_id' => Yii::$app->user->id, 'data' => $model->data])
+    ->one();
 ?>
 
 <div class="ementa-view">
@@ -32,14 +37,17 @@ use yii\helpers\Html;
                 </div>
 
                 <div class="mb-3">
-                    <label for="sopa" style="font-size: 17px; padding-bottom: 0.5vh">Cozinha Associada:</label>
+                    <label for="cozinha" style="font-size: 17px; padding-bottom: 0.5vh">Cozinha Associada:</label>
                     <input type="text" id="cozinha" class="form-control rounded-input" value="<?= Html::encode($cozinha ? $cozinha->designacao : 'N/A') ?>" readonly>
                 </div>
 
-                <div class="mb-4" style="text-align: center">
-                    <?= Html::a('Comprar Senha', ['senha/create', 'data' => Yii::$app->formatter->asDate($model->data, 'php:Y-m-d')], ['class' => 'btn btn-primary']) ?>
+                <div class="mb-4 text-center">
+                    <?php if ($senhaExistente): ?>
+                        <?= Html::a('Ver Senha', ['senha/view', 'id' => $senhaExistente->id , 'data' => Yii::$app->formatter->asDate($model->data, 'php:Y-m-d')], ['class' => 'btn btn-primary']) ?>
+                    <?php else: ?>
+                        <?= Html::a('Comprar Senha', ['senha/create', 'data' => Yii::$app->formatter->asDate($model->data, 'php:Y-m-d')], ['class' => 'btn btn-primary']) ?>
+                    <?php endif; ?>
                 </div>
-
             </div>
 
             <div class="text-center col-md-6">
@@ -57,4 +65,3 @@ use yii\helpers\Html;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 </style>
-
