@@ -40,8 +40,7 @@ AppAsset::register($this);
     $menuItems = [];
 
     if (!Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Agendar refeição', 'url' => ['/ementa/index']];
-
+        $menuItems[] = ['label' => 'Os meus dados', 'url' => ['/profile/view', 'user_id' => $userId]];
         $menuItems[] = [
             'label' => 'Faturas',
             'items' => [
@@ -49,7 +48,7 @@ AppAsset::register($this);
                 ['label' => 'Consultar Movimentos', 'url' => ['/movimento/index']],
             ],
         ];
-        $menuItems[] = ['label' => 'Os meus dados', 'url' => ['/profile/view', 'user_id' => $userId]];
+
     }
 
     if (Yii::$app->user->isGuest) {

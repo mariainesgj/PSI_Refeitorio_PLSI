@@ -10,6 +10,7 @@ use app\models\Profile;
 use app\models\Senha;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -217,5 +218,55 @@ class FaturaController extends Controller
             'senhas' => $senhas,
         ]);
     }
+
+    public function actionDownload($id){
+
+        $model = Fatura::findOne($id);
+
+        if ($model === null) {
+            throw new NotFoundHttpException("Fatura não encontrada.");
+        }
+
+        $htmlContent = "<html><head><title>Fatura #{$model->id}</title></head><body>";
+        $htmlContent .= "<h1>Fatura #{$model->id}</h1>";
+        $htmlContent .= "<p>Nome: " . Html::encode($model->userProfile->name) . "</p>";
+        $htmlContent .= "<p>Total: " . Html::encode(number_format($model->total_doc, 2, ',', '.')) . "€</p>";
+
+        $senhas = Linhasfatura::findAll(['fatura_id' => $model->id]);
+        $htmlContent .= "<h2>Detalhes das Senhas:</h2>";
+        $htmlContent .= "<table border='1' cellpadding='5' style='border-collapse: collapse; width: 100%;'>";
+        $htmlContent .= "<tr>
+        <th>Nº da Senha</th>
+        <th>Quantidade</th>
+        <th>Preço Sem Iva</th>
+        <th>Taxa de Iva</th>
+        <th>Total com Iva</th>
+    </tr>";
+
+        foreach ($senhas as $senha) {
+            $totalComIva = $senha->preco * (1 + $senha->taxa_iva / 100);
+            $htmlContent .= "<tr>
+            <td>{$senha->senha_id}</td>
+            <td>{$senha->quantidade}</td>
+            <td>" . number_format($senha->preco, 2, ',', '.') . "€</td>
+            <td>{$senha->taxa_iva}%</td>
+            <td>" . number_format($totalComIva, 2, ',', '.') . "€</td>
+        </tr>";
+        }
+
+        $htmlContent .= "</table></body></html>";
+
+        header('Content-Type: text/html');
+        header('Content-Disposition: attachment; filename="fatura_' . $model->id . '.html"');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . strlen($htmlContent));
+
+        echo $htmlContent;
+        exit;
+    }
+
+
+
 
 }
