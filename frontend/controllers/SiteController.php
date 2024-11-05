@@ -2,6 +2,9 @@
 
 namespace frontend\controllers;
 
+use app\models\Cozinha;
+use app\models\Ementa;
+use app\models\Prato;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -73,9 +76,48 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
-    {
-        return $this->render('index');
+
+    public function actionIndex() {
+
+        $userId = Yii::$app->user->id;
+        $profile = \app\models\Profile::find()->where(['user_id' => $userId])->one();
+
+        if (!$profile || !$profile->cozinha_id) {
+            Yii::$app->session->setFlash('error', 'Cozinha não associada ao seu perfil.');
+            return $this->goHome();
+        }
+
+        $cozinhaId = $profile->cozinha_id;
+        $userName = $profile->name;
+
+        $weekStart = Yii::$app->request->get('week_start') ? new \DateTime(Yii::$app->request->get('week_start')) : new \DateTime('monday this week');
+        $weekStart->modify('monday this week');
+
+        $weekDays = [];
+        for ($i = 0; $i < 5; $i++) {
+            $weekDays[] = $weekStart->format('Y-m-d');
+            $weekStart->modify('+1 day');
+        }
+
+        $pratos = Prato::find()->indexBy('id')->all();
+        $cozinha = Cozinha::findOne($cozinhaId);
+
+        $menus = [];
+        foreach ($weekDays as $date) {
+            $ementa = Ementa::find()
+                ->where(['data' => $date . ' 00:00:00', 'cozinha_id' => $cozinhaId])
+                ->one();
+            $menus[$date] = $ementa ?? null;
+        }
+
+        return $this->render('index', [
+            'cozinha' => $cozinha,
+            'weekDays' => $weekDays,
+            'menus' => $menus,
+            'pratos' => $pratos,
+            'userName' => $userName,
+            'currentWeekStart' => $weekStart->format('Y-m-d'),
+        ]);
     }
 
     /**
