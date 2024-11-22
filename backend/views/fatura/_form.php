@@ -70,9 +70,12 @@ $totalIva = 0;
 
                 <div style="margin-top: 7vh; text-align: right;">
                     <div style="display: inline-block; border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
-                    <p id="totalSemIva">Total Ilíquido: <?= Html::encode(number_format($totalSemIva, 2, ',', '.')) ?></p>
-                    <p id="totalIva">Total IVA: <?= Html::encode(number_format($totalIva, 2, ',', '.')) ?></p>
-                    <p id="totalValor">Total Documento: <?= Html::encode(number_format($totalValor, 2, ',', '.')) ?></p>
+                        <div>
+                            <p id="totalSemIva"><strong>Total Ilíquido:</strong> <span id="totalSemIva-value"><?= Html::encode(number_format($totalSemIva, 2, ',', '.')) ?></span> €</p>
+                            <p id="totalIva"><strong>Total IVA:</strong> <span id="totalIva-value"><?= Html::encode(number_format($totalIva, 2, ',', '.')) ?></span> €</p>
+                            <p id="totalValor"><strong>Total Documento:</strong> <span id="totalValor-value"><?= Html::encode(number_format($totalValor, 2, ',', '.')) ?></span> €</p>
+                        </div>
+
                     </div>
                 </div>
 
@@ -87,6 +90,7 @@ $totalIva = 0;
         <script>
             function fillUserData() {
                 const userId = document.getElementById('senha-user_id').value;
+                //console.log(userId);
 
                 const senhasTableBody = document.querySelector('#senhas-table tbody');
                 senhasTableBody.innerHTML = '';
@@ -117,7 +121,7 @@ $totalIva = 0;
 
             document.addEventListener('DOMContentLoaded', function() {
                 <?php foreach ($utilizadores as $utilizador): ?>
-                document.body.insertAdjacentHTML('beforeend', '<div class="user-data" style="display:none;" data-id="<?= $utilizador['id'] ?>" data-street="<?= $utilizador['street'] ?>" data-locale="<?= $utilizador['locale'] ?>" data-postalcode="<?= $utilizador['postalCode'] ?>"></div>');
+                document.body.insertAdjacentHTML('beforeend', '<div class="user-data" style="display:none;" data-id="<?= $utilizador['user_id'] ?>" data-street="<?= $utilizador['street'] ?>" data-locale="<?= $utilizador['locale'] ?>" data-postalcode="<?= $utilizador['postalCode'] ?>"></div>');
                 <?php endforeach; ?>
             });
 
@@ -132,7 +136,8 @@ $totalIva = 0;
                     const ivaElement = row.querySelector('.iva');
 
                     const valor = valorElement ? parseFloat(valorElement.textContent.replace('.', '').replace(',', '.')) || 0 : 0;
-                    const iva = ivaElement ? parseFloat(ivaElement.textContent.replace('.', '').replace(',', '.')) || 0 : 0;
+                    const iva = ivaElement ? parseFloat(ivaElement.textContent.replace('%', '').replace('.', '').replace(',', '.')) || 0 : 0;
+                    console.log(`o iva é igual a ${iva}`);
 
                     const ivaPercentage = iva / 100;
 
@@ -161,12 +166,18 @@ $totalIva = 0;
                     console.error('Um ou mais elementos de entrada para os totais não foram encontrados no DOM.');
                 }
 
-                document.getElementById('totalSemIva').textContent = totalSemIva.toFixed(2).replace('.', ',');
-                document.getElementById('totalIva').textContent = totalIva.toFixed(2).replace('.', ',');
-                document.getElementById('totalValor').textContent = totalValor.toFixed(2).replace('.', ',');
+                document.getElementById('totalSemIva-value').textContent = totalSemIva.toFixed(2).replace('.', ',');
+                document.getElementById('totalIva-value').textContent = totalIva.toFixed(2).replace('.', ',');
+                document.getElementById('totalValor-value').textContent = totalValor.toFixed(2).replace('.', ',');
+
             }
 
-
+            document.querySelector('form').addEventListener('submit', function(event) {
+                const ivaInputs = document.querySelectorAll('.iva');
+                ivaInputs.forEach(function(input) {
+                    input.value = input.value.replace('%', '');
+                });
+            });
 
         </script>
     </div>

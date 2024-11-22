@@ -75,4 +75,17 @@ class Linhasfatura extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Senha::class, ['id' => 'senha_id']);
     }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            // Se o valor de taxa_iva contiver um '%', remova-o e converta para número
+            if (isset($this->taxa_iva)) {
+                $this->taxa_iva = (float) str_replace('%', '', $this->taxa_iva);
+            }
+
+            return true;
+        }
+        return false;
+    }
 }

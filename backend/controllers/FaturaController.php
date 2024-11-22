@@ -82,11 +82,13 @@ class FaturaController extends Controller
     {
         $model = new Fatura();
         $utilizadores = Profile::find()
-            ->select(['id', 'name', 'locale', 'street', 'postalCode'])
+            ->select(['id', 'name', 'locale', 'street', 'postalCode' , 'user_id'])
             ->where(['role' => ['aluno', 'professor']])
             ->asArray()
             ->all();
-        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'id', 'name');
+        $utilizadoresList = \yii\helpers\ArrayHelper::map($utilizadores, 'user_id', 'name');
+
+        //var_dump($utilizadores);exit;
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $model->total_iliquido = $this->request->post('Fatura')['total_iliquido'];
@@ -106,8 +108,7 @@ class FaturaController extends Controller
                         $linhaFatura->senha_id = $senhaData['id'];
                         $linhaFatura->quantidade = $senhaData['quantidade'];
                         $linhaFatura->preco = $senhaData['preco_sem_iva'];
-                        $linhaFatura->taxa_iva = $senhaData['taxa_iva'];
-
+                        $linhaFatura->taxa_iva = str_replace('%', '', $senhaData['taxa_iva']);
                         if ($linhaFatura->save()) {
                             $numeroLinhas++;
                         } else {
@@ -207,15 +208,18 @@ class FaturaController extends Controller
 
 
     public function actionGetSenhas($userId){
-        $senhas = Senha::find()
+        $query = Senha::find()
             ->where(['user_id' => $userId, 'pago' => 0, 'consumido' => 0])
-            ->with('valor')
-            ->all();
+            ->with('valor');
 
+        $sql = $query->createCommand()->getRawSql();
+
+        $senhas = $query->all();
 
         return $this->renderAjax('_senhas', [
             'senhas' => $senhas,
         ]);
     }
+
 
 }
