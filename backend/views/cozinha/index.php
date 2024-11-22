@@ -16,71 +16,42 @@ use yii\grid\GridView;
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="mb-4" style="color: #979797;">Cozinhas</h3>
 
-            <div class="mb-3">
-                <?= Html::beginForm(['cozinha/index'], 'get', ['class' => 'input-group']) ?>
-                <?= Html::textInput('CozinhaSearch[localizacao]', $searchModel->localizacao, [
-                    'class' => 'form-control',
-                    'placeholder' => 'Localização',
-                    'style' => 'border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-top-left-radius: 7px; border-bottom-left-radius: 7px '
-                ]) ?>
-                <div class="input-group-append">
-                    <?= Html::submitButton('Pesquisar', [
-                        'class' => 'btn btn-primary ml-2',
-                        'id' => 'btn-pesquisar',
-                        'style' => 'margin-left: 10px;'
-                    ]) ?>
-                </div>
-                <?= Html::endForm() ?>
-            </div>
-
-
-
         </div>
 
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'options' => ['class' => 'table-responsive'],
-            'tableOptions' => [
-                'class' => 'table table-bordered rounded-table',
-                'style' => 'border-collapse: separate; border-spacing: 0;'
-            ],
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                [
-                    'attribute' => 'responsavel',
-                    'header' => 'Responsável',
-                    'headerOptions' => ['class' => 'text-center'],
-                    'contentOptions' => ['class' => 'text-center']
-                ],
-                [
-                    'attribute' => 'localizacao',
-                    'header' => 'Localização',
-                    'headerOptions' => ['class' => 'text-center'],
-                    'contentOptions' => ['class' => 'text-center']
-                ],
-                [
-                    'attribute' => 'designacao',
-                    'header' => 'Designação',
-                    'headerOptions' => ['class' => 'text-center'],
-                    'contentOptions' => ['class' => 'text-center']
-                ],
-                [
-                    'attribute' => 'telemovel',
-                    'header' => 'Telemóvel',
-                    'headerOptions' => ['class' => 'text-center'],
-                    'contentOptions' => ['class' => 'text-center']
-                ],
-                [
-                    'class' => ActionColumn::className(),
-                    'header' => 'Ações',
-                    'headerOptions' => ['class' => 'text-center'],
-                    'urlCreator' => function ($action, Cozinha $model, $key, $index, $column) {
-                        return Url::toRoute([$action, 'id' => $model->id]);
-                    },
-                    'contentOptions' => ['class' => 'text-center'],
-                ],
-            ],
-        ]); ?>
+        <table id="cozinhasTable" class="table table-bordered rounded-table table-responsive" style="border-collapse: separate; border-spacing: 0;">
+            <thead>
+            <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Responsável</th>
+                <th class="text-center">Localização</th>
+                <th class="text-center">Designação</th>
+                <th class="text-center">Telemóvel</th>
+                <th class="text-center">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($dataProvider->models as $index => $model): ?>
+                <tr>
+                    <td class="text-center"><?= $index + 1 ?></td>
+                    <td class="text-center"><?= Html::encode($model->responsavel) ?></td>
+                    <td class="text-center"><?= Html::encode($model->localizacao) ?></td>
+                    <td class="text-center"><?= Html::encode($model->designacao) ?></td>
+                    <td class="text-center"><?= Html::encode($model->telemovel) ?></td>
+                    <td class="text-center">
+                        <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                        <?= Html::a('Excluir', ['delete', 'id' => $model->id], [
+                            'class' => 'btn btn-danger',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to delete this item?',
+                                'method' => 'post',
+                            ],
+                        ]) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+
 
         <p class="text-center">
             <?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
@@ -122,3 +93,18 @@ use yii\grid\GridView;
     }
 
 </style>
+
+
+<script>
+    $(document).ready(function(){
+        new DataTable('#cozinhasTable',  {
+            language: {
+                emptyTable: "Sem cozinhas para mostrar.",
+                search: "Pesquisar:",
+                info: "A exibir as cozinhas de _START_ a _END_",
+                infoEmpty: "Sem cozinhas para exibir",
+                infoFiltered: " (das _MAX_ cozinhas existentes)",
+            },
+        });
+    });
+</script>
