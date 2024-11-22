@@ -76,7 +76,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getCarrinhos()
     {
-        return $this->hasMany(Carrinhos::class, ['user_id' => 'id']);
+        return $this->hasMany(Carrinho::class, ['user_id' => 'id']);
     }
 
     /**
@@ -86,7 +86,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getFaturas()
     {
-        return $this->hasMany(Faturas::class, ['user_id' => 'id']);
+        return $this->hasMany(Fatura::class, ['user_id' => 'id']);
     }
 
     /**
@@ -96,7 +96,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getMovimentos()
     {
-        return $this->hasMany(Movimentos::class, ['user_id' => 'id']);
+        return $this->hasMany(Movimento::class, ['user_id' => 'id']);
     }
 
     /**
@@ -104,10 +104,11 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getProfiles()
+    public function getProfile()
     {
-        return $this->hasMany(Profile::class, ['user_id' => 'id']);
+        return $this->hasOne(Profile::class, ['user_id' => 'id']);
     }
+
 
     /**
      * Gets query for [[Senhas]].
@@ -116,6 +117,6 @@ class User extends \yii\db\ActiveRecord
      */
     public function getSenhas()
     {
-        return $this->hasMany(Senhas::class, ['user_id' => 'id']);
+        return $this->hasMany(Senha::class, ['user_id' => 'id']);
     }
 }
