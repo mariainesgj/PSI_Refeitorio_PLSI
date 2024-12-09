@@ -15,16 +15,6 @@ use yii\helpers\Html;
             'class' => 'btn text-white',
             'style' => 'background-color: transparent; border: 1px solid white; padding: 5px 10px; margin-right: 10px;'
         ]) ?>
-
-        <?php if ($model->anulado !== 1): ?>
-            <?= Html::a('Anular', ['senha/anular', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Tem certeza que deseja anular esta senha?',
-                    'method' => 'post',
-                ],
-            ]) ?>
-        <?php endif; ?>
     </div>
 </div>
 

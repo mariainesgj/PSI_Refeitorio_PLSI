@@ -9,7 +9,6 @@ use Yii;
  * This is the model class for table "linhascarrinhos".
  *
  * @property int $id
- * @property int $senha_id
  * @property int $carrinho_id
  * @property int|null $ementa_id
  * @property int|null $prato_id
@@ -33,10 +32,9 @@ class Linhascarrinho extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['senha_id', 'carrinho_id'], 'required'],
-            [['senha_id', 'carrinho_id', 'ementa_id', 'prato_id'], 'integer'],
+            [['carrinho_id'], 'required'],
+            [['carrinho_id', 'ementa_id', 'prato_id'], 'integer'],
             [['carrinho_id'], 'exist', 'skipOnError' => true, 'targetClass' => Carrinho::class, 'targetAttribute' => ['carrinho_id' => 'id']],
-            [['senha_id'], 'exist', 'skipOnError' => true, 'targetClass' => Senha::class, 'targetAttribute' => ['senha_id' => 'id']],
         ];
     }
 
@@ -47,7 +45,6 @@ class Linhascarrinho extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'senha_id' => 'Senha ID',
             'carrinho_id' => 'Carrinho ID',
             'ementa_id' => 'Ementa ID',
             'prato_id' => 'Prato ID',
@@ -69,8 +66,5 @@ class Linhascarrinho extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getSenha()
-    {
-        return $this->hasOne(Senha::class, ['id' => 'senha_id']);
-    }
+
 }

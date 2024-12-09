@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "valores".
@@ -11,7 +12,7 @@ use Yii;
  * @property float $valor
  * @property float $iva
  *
- * @property Senhas[] $senhas
+ * @property Senha[] $senhas
  */
 class Valor extends \yii\db\ActiveRecord
 {
@@ -51,8 +52,13 @@ class Valor extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getSenhas()
+
+    public static function findModel($id)
     {
-        return $this->hasMany(Senhas::class, ['valor_id' => 'id']);
+        if (($model = Valor::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('O preçário solicitada não existe.');
     }
 }

@@ -19,11 +19,6 @@ use yii\helpers\Html;
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Anulado:</label>
-                    <input type="text" class="form-control" value="<?= $model->anulado ? 'Sim' : 'Não' ?>" readonly>
-                </div>
-
-                <div class="mb-3">
                     <label class="form-label">Consumido:</label>
                     <input type="text" class="form-control" value="<?= $model->consumido ? 'Sim' : 'Não' ?>" readonly>
                 </div>
@@ -62,13 +57,13 @@ use yii\helpers\Html;
 
                 <div class="mb-3">
                     <label class="form-label">Valor:</label>
-                    <input type="text" class="form-control" value="<?= $model->valor ? Html::encode($model->valor->valor) . ' €' : 'Sem valor' ?>" readonly>
+                    <input type="text" class="form-control" value="<?= $model->valor ? Html::encode($model->valor) . ' €' : 'Sem valor' ?>" readonly>
                 </div>
 
 
                 <div class="mb-3">
                     <label class="form-label">Taxa de IVA:</label>
-                    <input type="text" class="form-control" value="<?= $model->valor ? Html::encode($model->valor->iva) . ' %' : 'Sem taxa' ?>" readonly>
+                    <input type="text" class="form-control" value="<?= $model->valor ? Html::encode($model->iva) . ' %' : 'Sem taxa' ?>" readonly>
                 </div>
             </div>
 
@@ -79,13 +74,6 @@ use yii\helpers\Html;
 
         <div class="form-group text-center mt-4">
             <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Anular', ['senha/anular', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Tem certeza que deseja anular esta senha?',
-                    'method' => 'post',
-                ],
-            ]) ?>
         </div>
     </div>
 </div>

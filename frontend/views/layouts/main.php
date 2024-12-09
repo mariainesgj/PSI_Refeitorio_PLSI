@@ -1,6 +1,7 @@
 <?php
 
 /** @var \yii\web\View $this */
+
 /** @var string $content */
 
 use common\widgets\Alert;
@@ -70,8 +71,14 @@ AppAsset::register($this);
                 ['class' => 'btn btn-link logout text-decoration-none']
             )
             . Html::endForm();
-    }
-
+    } ?>
+    <div class="d-flex">
+        <button id="btn-card" class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+            <i class="fa fa-shopping-cart">Carrinho</i>
+        </button>
+    </div>
+    <?php
     NavBar::end();
     ?>
 </header>
@@ -83,6 +90,21 @@ AppAsset::register($this);
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
+
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header" style="flex-direction: column;">
+                <h5 class="offcanvas-title" id="offcanvasRightLabel">Carrinho de compras</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <div id="card-itens" class="col-12" style="flex-direction: column; display: flex; gap: 16px;">
+
+                </div>
+            </div>
+            <div class="offcanvas-body" style="flex-direction: column; display: flex; gap: 16px;">
+                <div>valor total: <span id="valor-total"></span></div>
+                <button class="btn btn-primary">Checkout</button>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -93,7 +115,39 @@ AppAsset::register($this);
     </div>
 </footer>
 
+
 <?php $this->endBody() ?>
 </body>
 </html>
 <?php $this->endPage(); ?>
+
+
+<script>
+    $(function () {
+        $('#btn-card').click(function () {
+            $('#card-itens').html(`
+            <div>A carregar o carrinho...</div>
+            `)
+            $.ajax({
+                url: '<?=\yii\helpers\Url::to('?r=carrinho/listar-carrinho')?>',
+                success: function (response) {
+                    var cardContent = $('#card-itens')
+                    cardContent.html('')
+                    response.forEach((item) => {
+                        cardContent.append(item.html)
+                    })
+                    var valorTotal = response.reduce((a,b )=>a.valor+b.valor)
+                    $('#valor-total').html(
+                        `${valorTotal}€`
+                    )
+
+                },
+                error: function () {
+                    $('#card-itens').html(`
+            <div>Erro ao carregar os itens</div>
+            `)
+                }
+            })
+        })
+    })
+</script>
