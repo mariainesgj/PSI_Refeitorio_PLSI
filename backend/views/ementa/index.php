@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             );
                         } else {
                             $menuContent .= '<div class="date-line">';
-                            $menuContent .= '<img src="' . Yii::getAlias('@web/images/img.png') . '" alt="Imagem ilustrativa" class="img-fluid" style="width: 7vw"><br>';
+                            $menuContent .= '<img src="' . Yii::getAlias('@web/images/folha.png') . '" alt="Imagem ilustrativa" class="img-fluid" style="width: 7vw"><br>';
                             $menuContent .= '<span>Ainda sem ementa</span>';
                             $menuContent .= '</div>';
                         }

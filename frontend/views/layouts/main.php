@@ -101,9 +101,15 @@ AppAsset::register($this);
                 </div>
             </div>
             <div class="offcanvas-body" style="flex-direction: column; display: flex; gap: 16px;">
-                <div><span id="quantidade-itens"></span>/ TOTAL: <span id="valor-total"></span></div>
+                <div style="font-weight: lighter; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 1;">
+            <span id="quantidade-itens"></span> / TOTAL:
+        </span>
+                    <span id="valor-total" style="text-align: right;"></span>
+                </div>
                 <button class="btn btn-primary">Checkout</button>
             </div>
+
         </div>
     </div>
 </main>
