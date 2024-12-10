@@ -90,7 +90,8 @@ class Carrinho extends \yii\db\ActiveRecord
 
         $conn = Yii::$app->getDb();
         $sql = $conn->createCommand("
-            SELECT 
+            SELECT
+                lc.id as linha_id,
                 lc.ementa_id as ementa_id, 
                 lc.prato_id as prato_id, 
                 e.data as ementa_data, 
