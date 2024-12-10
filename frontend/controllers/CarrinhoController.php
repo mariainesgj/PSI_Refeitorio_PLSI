@@ -63,33 +63,29 @@ class CarrinhoController extends Controller
 
     public function actionListarCarrinho()
     {
-        $itens = [
-            (object)[
-                'ementa_id' => 1,
-                'prato_id' => 2,
-                'prato_nome' => 'Bacalhau com natas',
-                'data_ementa' => '2024-12-09',
-                'valor' => 3.5 //valor atual
-            ],
-            (object)[
-                'ementa_id' => 1,
-                'prato_id' => 2,
-                'prato_nome' => 'Bacalhau à braz',
-                'data_ementa' => '2024-12-09',
-                'valor' => 3.5
-            ]
-        ];
+        $carrinho = Carrinho::find()->where(['status' => 'ativo'])->one();
+        $linhasCarrinho = Carrinho::getLinhasCarrinho($carrinho->id);
+        //var_dump($linhasCarrinho);exit;
+        $itens = [];
 
-        foreach ($itens as $item) {
-            $item->html = $this->renderPartial('linhacard',
-                [
-                    'item' => $item
-                ]);
+        foreach ($linhasCarrinho as $linha) {
+            $item = [
+                'ementa_id' => $linha->ementa_id,
+                'prato_id' => $linha->prato_id,
+                'ementa_data' => $linha->ementa_data,
+                'prato_nome' => $linha->prato_nome,
+                'prato_tipo' => $linha->prato_tipo,
+                'valor' => $linha->valor,
+                'html' => $this->renderPartial('linhacard', ['item' => $linha]),
+            ];
+
+            $itens[] = $item;
         }
         header('Content-Type: application/json; charset=utf-8');
 
         return $this->asJson($itens);
     }
+
 
     /**
      * Displays a single Carrinho model.
@@ -151,7 +147,7 @@ class CarrinhoController extends Controller
                 ->all();
         }*/
 
-        return $this->redirect(['carrinho/view', 'id' => $carrinho->id]);
+        return $this->redirect(['carrinho/listar-carrinho']); //, 'id' => $carrinho->id
     }
 
     /**

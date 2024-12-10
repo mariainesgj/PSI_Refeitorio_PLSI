@@ -4,7 +4,9 @@ namespace frontend\models;
 
 use app\models\Linhascarrinho;
 use app\models\User;
+use PDO;
 use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "carrinhos".
@@ -73,5 +75,39 @@ class Carrinho extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public static function findModel($id)
+    {
+        if (($model = Carrinho::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('O preçário solicitada não existe.');
+    }
+
+    static function getLinhasCarrinho($id){
+
+        $conn = Yii::$app->getDb();
+        $sql = $conn->createCommand("
+            SELECT 
+                lc.ementa_id as ementa_id, 
+                lc.prato_id as prato_id, 
+                e.data as ementa_data, 
+                p.designacao as prato_nome,
+                p.tipo as prato_tipo,
+                v.valor as valor
+            FROM 
+                linhascarrinhos lc
+            JOIN 
+                ementas e ON lc.ementa_id = e.id
+            JOIN 
+                pratos p ON lc.prato_id = p.id
+            JOIN 
+                valores v ON v.id = 1
+            WHERE 
+                lc.carrinho_id = :id;
+        " , ['id' => $id]);
+        return $sql->queryAll(PDO::FETCH_CLASS);
     }
 }

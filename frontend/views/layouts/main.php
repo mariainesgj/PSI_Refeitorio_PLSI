@@ -101,7 +101,7 @@ AppAsset::register($this);
                 </div>
             </div>
             <div class="offcanvas-body" style="flex-direction: column; display: flex; gap: 16px;">
-                <div>valor total: <span id="valor-total"></span></div>
+                <div><span id="quantidade-itens"></span>/ TOTAL: <span id="valor-total"></span></div>
                 <button class="btn btn-primary">Checkout</button>
             </div>
         </div>
@@ -127,27 +127,43 @@ AppAsset::register($this);
         $('#btn-card').click(function () {
             $('#card-itens').html(`
             <div>A carregar o carrinho...</div>
-            `)
+        `);
             $.ajax({
-                url: '<?=\yii\helpers\Url::to('?r=carrinho/listar-carrinho')?>',
+                url: '<?= \yii\helpers\Url::to('?r=carrinho/listar-carrinho') ?>',
+                dataType: 'json', //garante que a repsosta é tratada como JSON
                 success: function (response) {
-                    var cardContent = $('#card-itens')
-                    cardContent.html('')
-                    response.forEach((item) => {
-                        cardContent.append(item.html)
-                    })
-                    var valorTotal = response.reduce((a,b )=>a.valor+b.valor)
-                    $('#valor-total').html(
-                        `${valorTotal}€`
-                    )
+                    if (Array.isArray(response)) {
+                        var cardContent = $('#card-itens');
+                        cardContent.html('');
+                        var quantidadeItens = response.length;
+                        //console.log("Quantidade de itens:", quantidadeItens);
+                        $('#quantidade-itens').html(`${quantidadeItens} senha(s)`);
 
+                        response.forEach(function (item) {
+                            if (item.html) {
+                                cardContent.append(item.html);
+                            }
+                        });
+
+                        var valorTotal = response.reduce(function (total, item) {
+                            return total + parseFloat(item.valor);
+                        }, 0);
+
+                        $('#valor-total').html(
+                            `${valorTotal.toFixed(2)}€`
+                        );
+
+                    } else {
+                        $('#card-itens').html('<div>Erro: resposta não é um array válido.</div>');
+                    }
                 },
                 error: function () {
                     $('#card-itens').html(`
-            <div>Erro ao carregar os itens</div>
-            `)
+                    <div>Erro ao carregar os itens</div>
+                `);
                 }
-            })
-        })
-    })
+            });
+        });
+    });
+
 </script>
