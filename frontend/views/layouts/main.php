@@ -107,7 +107,7 @@ AppAsset::register($this);
         </span>
                     <span id="valor-total" style="text-align: right;"></span>
                 </div>
-                <button class="btn btn-primary">Checkout</button>
+                <?= Html::a('Checkout', ['carrinho/checkout'], ['class'=>'btn btn-primary']) ?>
             </div>
 
         </div>

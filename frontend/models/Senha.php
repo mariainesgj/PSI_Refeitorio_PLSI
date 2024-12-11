@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property string $data
- * @property int $anulado
  * @property int $consumido
  * @property string $criado
  * @property string|null $alterado
@@ -45,13 +44,12 @@ class Senha extends \yii\db\ActiveRecord
         return [
             [['data', 'user_id', 'ementa_id', 'prato_id'], 'required'],
             [['data', 'criado', 'alterado' , 'lido'], 'safe'],
-            [['anulado', 'consumido'], 'boolean'],
-            [['user_id', 'ementa_id', 'prato_id' , 'valor_id'], 'integer'],
+            [['consumido'], 'boolean'],
+            [['user_id', 'ementa_id', 'prato_id'], 'integer'],
             [['descricao'], 'string', 'max' => 255],
             [['ementa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ementa::class, 'targetAttribute' => ['ementa_id' => 'id']],
             [['prato_id'], 'exist', 'skipOnError' => true, 'targetClass' => Prato::class, 'targetAttribute' => ['prato_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-            [['valor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Valor::class, 'targetAttribute' => ['valor_id' => 'id']],
         ];
     }
 
@@ -63,7 +61,6 @@ class Senha extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'data' => 'Data',
-            'anulado' => 'Anulado',
             'consumido' => 'Consumido',
             'criado' => 'Criado',
             'alterado' => 'Alterado',
@@ -72,7 +69,6 @@ class Senha extends \yii\db\ActiveRecord
             'ementa_id' => 'Ementa ID',
             'prato_id' => 'Prato ID',
             'lido' => 'Lido',
-            'valor_id' => 'Valor'
         ];
     }
 
@@ -136,10 +132,6 @@ class Senha extends \yii\db\ActiveRecord
         return $this->hasOne(Cozinha::class, ['id' => 'cozinha_id']);
     }
 
-    public function getValor()
-    {
-        return $this->hasOne(Valor::class, ['id' => 'valor_id']);
-    }
 
 
 }

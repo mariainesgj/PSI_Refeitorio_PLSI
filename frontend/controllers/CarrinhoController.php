@@ -2,7 +2,11 @@
 
 namespace frontend\controllers;
 
+use app\models\Fatura;
 use app\models\Linhascarrinho;
+use app\models\Linhasfatura;
+use app\models\Movimento;
+use app\models\Senha;
 use app\models\Valor;
 use frontend\models\Carrinho;
 use Yii;
@@ -86,6 +90,91 @@ class CarrinhoController extends Controller
 
         return $this->asJson($itens);
     }
+
+    public function actionCheckout() {
+
+        $carrinho = Carrinho::find()->where(['status' => 'ativo'])->one();
+
+        if (!$carrinho) {
+            throw new NotFoundHttpException("Carrinho não encontrado.");
+        }
+
+        $linhasCarrinho = Carrinho::getLinhasCarrinho($carrinho->id);
+
+        $fatura = new Fatura();
+        $fatura->total_iliquido = 0;
+        $fatura->total_iva = 0;
+        $fatura->user_id = Yii::$app->user->id;
+        $fatura->data = date('Y-m-d');
+        $fatura->total_doc = 0;
+        if (!$fatura->save()) {
+            return $this->renderError("Erro ao criar a fatura.");
+        }
+
+        $valorIliquido = 0;
+        $valorTotalIva = 0;
+        $valorTotal = 0;
+
+        foreach ($linhasCarrinho as $linha) {
+            $senha = new Senha();
+            $senha->ementa_id = $linha->ementa_id;
+            $senha->prato_id = $linha->prato_id;
+            $senha->data = Yii::$app->formatter->asDate($linha->ementa_data, 'yyyy-MM-dd');
+            $senha->user_id = Yii::$app->user->id;
+            $senha->pago = 1;
+
+            if ($senha->save()) {
+                $senha = Senha::find()
+                    ->where(['data' => $senha->data])
+                    ->orderBy(['data' => SORT_DESC])
+                    ->one();
+
+                $valor = $senha->valor;
+                $iva = $senha->iva;
+
+                $linhaFatura = new Linhasfatura();
+                $linhaFatura->quantidade = 1;
+                $linhaFatura->preco = $valor;
+                $linhaFatura->taxa_iva = $iva;
+                $linhaFatura->fatura_id = $fatura->id;
+                $linhaFatura->senha_id = $senha->id;
+                if ($linhaFatura->save()) {
+                    $valorTotal += $linhaFatura->preco;
+                    $valorTotalIva += ($linhaFatura->preco * $linhaFatura->taxa_iva) / 100;
+                    $valorIliquido += $linhaFatura->preco;
+                }
+
+            } else {
+                Yii::$app->session->setFlash('error', 'Erro ao criar a senha para a linha do carrinho.');
+            }
+        }
+
+        $quantidadeLinhasCarrinho = count($linhasCarrinho);
+
+        $movimento = new Movimento();
+        $movimento->tipo = 'credito';
+        $movimento->data = date('Y-m-d H:i:s');
+        $movimento->origem = $fatura->id;
+        $movimento->quantidade = $quantidadeLinhasCarrinho;
+        $movimento->user_id = Yii::$app->user->id;
+        //var_dump($movimento);exit;
+        if (!$movimento->save()) {
+            Yii::$app->session->setFlash('error', 'Erro ao criar o movimento.');
+        }
+
+        $fatura->total_iva = $valorTotalIva;
+        $fatura->total_iliquido = $valorTotal;
+        $fatura->total_doc = $valorTotalIva + $valorTotal;
+        $fatura->save();
+
+        $carrinho->status = 'finalizado';
+        if ($carrinho->save()) {
+            return $this->redirect(['fatura/view', 'id' => $fatura->id]);
+        } else {
+            return $this->renderError("Erro ao finalizar o carrinho.");
+        }
+    }
+
 
 
     /**

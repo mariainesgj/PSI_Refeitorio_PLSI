@@ -47,7 +47,7 @@
     function confirmDelete(itemId) {
         const form = document.getElementById('delete-form-' + itemId);
         if (confirm('Tem certeza que deseja remover este item?')) {
-            form.submit();  // Submete o formulário para excluir o item
+            form.submit();
         }
     }
 </script>
