@@ -112,13 +112,13 @@ class ProfileController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = Profile::findOne(['id' => $id]);
 
         $cozinhas = Cozinha::find()->all();
         $cozinhasList = \yii\helpers\ArrayHelper::map($cozinhas , 'id' , 'designacao');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'user_id' => $model->user_id]);
         }
 
         return $this->render('update', [

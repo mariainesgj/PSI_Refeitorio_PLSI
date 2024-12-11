@@ -23,6 +23,10 @@ $this->title = 'Refeitório';
 
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
+                <p style="font-size: 14px; text-align: center">
+                    Ainda não tem conta?
+                    <?= \yii\helpers\Html::a('Criar', ['site/signup'], ['class' => 'text-primary']) ?>
+                </p>
 
                 <div class="form-group">
                     <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>

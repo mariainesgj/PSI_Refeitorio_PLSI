@@ -14,6 +14,8 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $cozinha_id;
+    public $role;
 
 
     /**
@@ -35,20 +37,25 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+
+            ['cozinha_id', 'required', 'message' => 'Por favor, selecione uma cozinha.'],
+            ['cozinha_id', 'integer', 'message' => 'ID de cozinha inválido.'],
+
+            ['role', 'in', 'range' => ['professor', 'aluno']],
         ];
     }
 
     /**
      * Signs user up.
      *
-     * @return bool whether the creating new account was successful and email was sent
+     * @return User whether the creating new account was successful and email was sent
      */
     public function signup()
     {
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
@@ -56,7 +63,7 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
 
-        return $user->save() && $this->sendEmail($user);
+        return $user->save() ? $user : null;
     }
 
     /**

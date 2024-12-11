@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use app\models\Cozinha;
 use app\models\Ementa;
 use app\models\Prato;
+use app\models\Profile;
 use app\models\Senha;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
@@ -161,7 +162,7 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return $this->redirect(['site/login']);
     }
 
     /**
@@ -202,8 +203,11 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionSignup()
+    /*public function actionSignup()
     {
+        $cozinhas = Cozinha::find()->all();
+        $cozinhasList = \yii\helpers\ArrayHelper::map($cozinhas , 'id' , 'designacao');
+
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
@@ -212,8 +216,51 @@ class SiteController extends Controller
 
         return $this->render('signup', [
             'model' => $model,
+            'cozinhasList' => $cozinhasList,
+        ]);
+    }*/
+
+    public function actionSignup()
+    {
+        $cozinhas = Cozinha::find()->all();
+        $cozinhasList = \yii\helpers\ArrayHelper::map($cozinhas, 'id', 'designacao');
+
+        $model = new SignupForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            //var_dump(Yii::$app->request->post());exit;
+            $user = $model->signup();
+
+            if ($user) {
+                $profile = new Profile();
+                $profile->name = '';
+                $profile->mobile = '';
+                $profile->street = '';
+                $profile->locale = '';
+                $profile->postalCode = '0000-00';
+                $profile->role = $model->role;
+                $profile->user_id = $user->id;
+                $profile->cozinha_id = (int) $model->cozinha_id;
+                //var_dump($profile);exit;
+                if ($profile->save()) {
+                    Yii::$app->session->setFlash('success', 'Obrigado pelo registo. Por favor, aguarde a aprovação da sua conta por parte dos serviços administrativos.');
+                    return $this->redirect(['site/login']);
+                } else {
+                    echo json_encode($profile->getErrors()); exit;
+                    Yii::$app->session->setFlash('error', 'Ocorreu um erro ao criar o perfil do utilizador.');
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro, por favor tente mais tarde.');
+            }
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+            'cozinhasList' => $cozinhasList,
         ]);
     }
+
+
 
     /**
      * Requests password reset.

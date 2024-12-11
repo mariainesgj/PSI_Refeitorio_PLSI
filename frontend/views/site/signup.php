@@ -21,7 +21,26 @@ $this->title = 'Criar conta';
 
             <?= $form->field($model, 'email') ?>
 
+            <?= $form->field($model, 'cozinha_id')
+                ->dropDownList($cozinhasList, ['prompt' => 'Selecione uma cozinha.', 'class' => 'form-control dropdown-with-arrow'])
+                ->label('Cozinha associada:', ['class' => 'form-label'])
+            ?>
+
+            <?= $form->field($model, 'role')
+                ->dropDownList(
+                    ['professor' => 'Professor', 'aluno' => 'Aluno'],
+                    ['class' => 'form-control dropdown-with-arrow']
+                )
+                ->label('Sou...', ['class' => 'form-label'])
+            ?>
+
             <?= $form->field($model, 'password')->passwordInput() ?>
+
+                <p style="font-size: 14px; text-align: center">
+                    Se já possuir uma conta,
+                    <?= \yii\helpers\Html::a('inicie sessão', ['site/login'], ['class' => 'text-primary']) ?>
+                </p>
+
 
             <div class="form-group">
                 <?= Html::submitButton('Criar conta', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

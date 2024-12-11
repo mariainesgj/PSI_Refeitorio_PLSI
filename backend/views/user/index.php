@@ -79,7 +79,7 @@ if ($error !== null) {
                 <?php foreach ($users as $user): ?>
                     <tr>
                         <td class="text-center"><?= Html::encode($user->username) ?></td>
-                        <td class="text-center"><?= Html::encode($user->profile->role ?? 'Sem perfil') ?></td>
+                        <td class="text-center"><?= Html::encode(ucfirst($user->profile->role ?? 'Sem perfil')) ?></td>
                         <td class="text-center"><?= Html::encode($user->email) ?></td>
                         <td class="text-center">
                             <?php if ($user->status == 10): ?>

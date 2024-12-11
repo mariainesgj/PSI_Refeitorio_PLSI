@@ -6,6 +6,7 @@ use app\models\Fatura;
 use app\models\Linhascarrinho;
 use app\models\Linhasfatura;
 use app\models\Movimento;
+use app\models\Profile;
 use app\models\Senha;
 use app\models\Valor;
 use frontend\models\Carrinho;
@@ -197,6 +198,15 @@ class CarrinhoController extends Controller
      */
     public function actionCreate()
     {
+        $userId = Yii::$app->user->id;
+
+        $profile = Profile::find()->where(['user_id' => $userId])->one();
+
+        if (!$profile || !$profile->name || !$profile->mobile || !$profile->street || !$profile->locale || !$profile->postalCode) {
+            Yii::$app->session->setFlash('error', 'Por favor, insira os seus dados pessoais antes de prosseguir. ');
+            return $this->redirect(['profile/view', 'user_id' => $userId]);
+        }
+
         $id = Yii::$app->request->post('ementa_id');
         $pratoId = Yii::$app->request->post('prato_id');
         $userId = Yii::$app->user->id;
