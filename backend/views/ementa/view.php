@@ -18,17 +18,20 @@ use yii\helpers\Html;
 
                 <div class="mb-3">
                     <label for="pratonormal" style="font-size: 17px; padding-bottom: 0.5vh">Prato Normal:</label>
-                    <input type="text" id="pratonormal" class="form-control rounded-input" value="<?= Html::encode($model->prato_normal ? $pratos[$model->prato_normal]->designacao : 'N/A') ?>" readonly>
+                    <input type="text" id="pratonormal" class="form-control rounded-input"
+                           value="<?= Html::encode(isset($pratosMap[$model->prato_normal]) ? $pratosMap[$model->prato_normal]->designacao : 'N/A') ?>" readonly>
                 </div>
 
                 <div class="mb-3">
                     <label for="pratovegetariano" style="font-size: 17px; padding-bottom: 0.5vh">Prato Vegetariano:</label>
-                    <input type="text" id="pratovegetariano" class="form-control rounded-input" value="<?= Html::encode($model->prato_vegetariano ? $pratos[$model->prato_vegetariano]->designacao : 'N/A') ?>" readonly>
+                    <input type="text" id="pratovegetariano" class="form-control rounded-input"
+                           value="<?= Html::encode(isset($pratosMap[$model->prato_vegetariano]) ? $pratosMap[$model->prato_vegetariano]->designacao : 'N/A') ?>" readonly>
                 </div>
 
                 <div class="mb-3">
                     <label for="sopa" style="font-size: 17px; padding-bottom: 0.5vh">Sopa:</label>
-                    <input type="text" id="sopa" class="form-control rounded-input" value="<?= Html::encode($model->sopa ? $pratos[$model->sopa]->designacao : 'N/A') ?>" readonly>
+                    <input type="text" id="sopa" class="form-control rounded-input"
+                           value="<?= Html::encode(isset($pratosMap[$model->sopa]) ? $pratosMap[$model->sopa]->designacao : 'N/A') ?>" readonly>
                 </div>
 
                 <div class="mb-3">

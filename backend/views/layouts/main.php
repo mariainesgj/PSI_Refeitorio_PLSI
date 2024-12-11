@@ -45,10 +45,7 @@ AppAsset::register($this);
     $userId = Yii::$app->user->id;
 
     $menuItems = [
-        ['label' => 'Utilizadores', 'url' => ['/user/index']],
-        ['label' => 'Cozinhas', 'url' => ['/cozinha/index']],
         ['label' => 'Ementas', 'url' => ['/ementa/index']],
-        ['label' => 'Pratos', 'url' => ['/prato/index']],
         ['label' => 'Senhas', 'url' => ['/senha/index']],
         [
             'label' => 'Faturas',
@@ -58,6 +55,11 @@ AppAsset::register($this);
                 ['label' => 'Consultar Movimentos', 'url' => ['/movimento/index']],
             ],
         ],
+        ['label' => 'Pratos', 'url' => ['/prato/index']],
+        ['label' => 'Cozinhas', 'url' => ['/cozinha/index']],
+        ['label' => 'Preçário', 'url' => ['/valor/update']],
+        ['label' => 'Utilizadores', 'url' => ['/user/index']],
+
         ['label' => 'Os meus dados', 'url' => ['/profile/view', 'user_id' => $userId]],
     ];
     if (Yii::$app->user->isGuest) {
