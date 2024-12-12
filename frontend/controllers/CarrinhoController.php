@@ -213,6 +213,19 @@ class CarrinhoController extends Controller
         $valor = Valor::findModel(1);
         $carrinhoCount = Carrinho::find()->count();
 
+        $linhasExist = Linhascarrinho::find()
+            ->joinWith('carrinho')
+            ->where(['carrinhos.user_id' => $userId])
+            ->andWhere(['linhascarrinhos.ementa_id' => $id])
+            ->one();
+
+
+        if($linhasExist){
+            Yii::$app->session->setFlash('error', 'Só pode agendar uma refeição por dia, por favor verifique o seu carrinho. ');
+            return $this->redirect(['site/index']);
+        }
+
+
         if ($valor) {
             $subtotalAoCriar = $valor->valor;
         } else {

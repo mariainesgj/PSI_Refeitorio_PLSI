@@ -11,38 +11,65 @@ class RbacController extends Controller{
         $auth = \Yii::$app->authManager;
         $auth->removeAll();
 
+        $accessFrontend = $auth->createPermission('accessFrontend');
+        $accessFrontend->description = 'Acesso ao frontend';
+        $auth->add($accessFrontend);
+
+        $accessBackend = $auth->createPermission('accessBackend');
+        $accessBackend->description = 'Acesso ao backend';
+        $auth->add($accessBackend);
+
+        $viewUsers = $auth->createPermission('viewUsers');
+        $viewUsers->description = 'Visualizar e listar utilizadores';
+        $auth->add($viewUsers);
+
         $funcionario = $auth->createRole('funcionario');
         $auth->add($funcionario);
         $administrador = $auth->createRole('administrador');
         $auth->add($administrador);
+        $aluno = $auth->createRole('aluno');
+        $auth->add($aluno);
+        $professor = $auth->createRole('professor');
+        $auth->add($professor);
 
-        #FOR FUNCIONÁRIO
-        //$createMenus
-        //$editMenus
-        //$viewMenus
-        //$deleteMenus
-
-        //$viewLunches
-
-        //$editOwnUserDetaisls
-#http://localhost/refeitorio/backend/web/index.php?r=site%2Flogin
-
-
-        /**$viewInvoices = $auth->createPermission('viewInvoices');
-        $auth->add($viewInvoices);
-        $registerClients = $auth->createPermission('registerClients');
-        $auth->add($registerClients);
-        $editClients = $auth->createPermission('editClients');
-        $auth->add($editClients);
-        $createInvoices = $auth->createPermission('createInvoices');
-        $auth->add($createInvoices);
-
-        $auth->addChild($funcionario , $viewInvoices);
-        $auth->addChild($funcionario , $registerClients);
-        $auth->addChild($funcionario , $editClients);
-        $auth->addChild($funcionario , $createInvoices);**/
 
         echo 'Rbac and roles initialized.';
     }
 
 }
+
+
+/*
+ * namespace frontend\controllers;
+
+use Yii;
+use yii\web\Controller;
+use app\models\Profile;
+use app\models\User;
+
+class ProfileController extends Controller
+{
+    public function actionCreate()
+    {
+        $model = new Profile();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            if ($model->isNewRecord) {
+                $model->role = 'aluno';
+            }
+
+            $model->save();
+            $auth = Yii::$app->authManager;
+            $role = $auth->getRole($model->role);
+            $auth->assign($role, Yii::$app->user->id);
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+}
+*/

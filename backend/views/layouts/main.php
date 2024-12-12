@@ -50,7 +50,6 @@ AppAsset::register($this);
         [
             'label' => 'Faturas',
             'items' => [
-                ['label' => 'Gerar Fatura', 'url' => ['/fatura/create']],
                 ['label' => 'Consultar Faturas', 'url' => ['/fatura/index']],
                 ['label' => 'Consultar Movimentos', 'url' => ['/movimento/index']],
             ],

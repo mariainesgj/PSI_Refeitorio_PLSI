@@ -10,6 +10,9 @@ use yii\helpers\Html;
 
 <div class="fatura-view">
     <div class="container mt-6" style="max-width: 1200px;">
+        <div class="mb-4">
+            <?= Html::a('Voltar', ['index'], ['class' => 'btn btn-secondary']) ?>
+        </div>
         <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Fatura nº <?=$model->id?></h4>
 
         <div class="data-container">
@@ -46,12 +49,12 @@ use yii\helpers\Html;
                         <tr>
                             <td style="text-align: center;"><?= Html::encode($senha->senha_id) ?></td>
                             <td style="text-align: center;"><?= Html::encode($senha->quantidade) ?></td>
-                            <td style="text-align: center;"><?= Html::encode(number_format($senha->preco, 2, ',', '.')) ?></td>
+                            <td style="text-align: center;"><?= Html::encode(number_format($senha->preco, 2, ',', '.')) ?>€</td>
                             <td style="text-align: center;"><?= Html::encode($senha->taxa_iva) ?>%</td>
 
                             <?php $totalComIva = $senha->preco * (1 + $senha->taxa_iva / 100); ?>
 
-                            <td style="text-align: center;"><?= Html::encode(number_format($totalComIva, 2, ',', '.')) ?></td>
+                            <td style="text-align: center;"><?= Html::encode(number_format($totalComIva, 2, ',', '.')) ?>€</td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -60,9 +63,9 @@ use yii\helpers\Html;
 
             <div style="margin-top: 7vh; text-align: right;">
                 <div style="display: inline-block; border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
-                    <p><strong>Total Ilíquido:</strong> <?= Html::encode(number_format($model->total_iliquido, 2, ',', '.')) ?></p>
-                    <p><strong>Total IVA:</strong> <?= Html::encode(number_format($model->total_iva, 2, ',', '.')) ?></p>
-                    <p><strong>Total Documento:</strong> <?= Html::encode(number_format($model->total_doc, 2, ',', '.')) ?></p>
+                    <p><strong>Total Ilíquido:</strong> <?= Html::encode(number_format($model->total_iliquido, 2, ',', '.')) ?>€</p>
+                    <p><strong>Total IVA:</strong> <?= Html::encode(number_format($model->total_iva, 2, ',', '.')) ?>€</p>
+                    <p><strong>Total Documento:</strong> <?= Html::encode(number_format($model->total_doc, 2, ',', '.')) ?>€</p>
                 </div>
             </div>
 
