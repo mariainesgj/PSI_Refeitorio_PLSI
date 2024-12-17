@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use app\models\Linhasfatura;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +22,19 @@ class LinhasfaturaController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => false,
+                            'roles' => ['funcionario'],
+                        ],
+                        [
+                            'allow' => true,
+                            'roles' => ['administrador'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

@@ -83,9 +83,11 @@ class SiteController extends Controller
         $userId = Yii::$app->user->id;
         $profile = \app\models\Profile::find()->where(['user_id' => $userId])->one();
 
+        //var_dump($profile);exit;
+
         if (!$profile || !$profile->cozinha_id) {
             Yii::$app->session->setFlash('error', 'Cozinha não associada ao seu perfil.');
-            return $this->goHome();
+            return $this->redirect(['site/login']);
         }
 
         $cozinhaId = $profile->cozinha_id;

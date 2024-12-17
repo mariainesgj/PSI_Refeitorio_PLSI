@@ -14,6 +14,9 @@ $this->title = $model->name;
         <div class="container mt-6">
             <div class="row d-flex align-items-center">
                 <div class="col-md-6">
+                    <div class="mb-4">
+                        <?= Html::a('Voltar', ['user/index'], ['class' => 'btn btn-secondary']) ?>
+                    </div>
                     <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Dados: <?= Html::encode($model->name) ?></h4>
 
                     <div class="mb-3">

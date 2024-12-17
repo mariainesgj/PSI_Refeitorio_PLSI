@@ -41,6 +41,7 @@ use yii\helpers\Html;
 
                 <div class="form-group text-center">
                     <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                    <?php if ($isAdmin): ?>
                     <?= Html::a('Excluir', ['delete', 'id' => $model->id], [
                         'class' => 'btn btn-danger',
                         'data' => [
@@ -48,6 +49,7 @@ use yii\helpers\Html;
                             'method' => 'post',
                         ],
                     ]) ?>
+                    <?php endif; ?>
                 </div>
             </div>
 

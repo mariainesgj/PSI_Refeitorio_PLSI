@@ -43,24 +43,36 @@ AppAsset::register($this);
     ]);
 
     $userId = Yii::$app->user->id;
+    $isAdmin = Yii::$app->authManager->getRolesByUser($userId) && in_array('administrador', array_keys(Yii::$app->authManager->getRolesByUser($userId)));
+    $isFuncionario = Yii::$app->authManager->getRolesByUser($userId) && in_array('funcionario', array_keys(Yii::$app->authManager->getRolesByUser($userId)));
 
-    $menuItems = [
-        ['label' => 'Ementas', 'url' => ['/ementa/index']],
-        ['label' => 'Senhas', 'url' => ['/senha/index']],
-        [
-            'label' => 'Faturas',
-            'items' => [
+    $menuItems = [];
+
+    if ($isAdmin) {
+        $menuItems = [
+            ['label' => 'Ementas', 'url' => ['/ementa/index']],
+            ['label' => 'Senhas', 'url' => ['/senha/index']],
+            ['label' => 'Faturas', 'items' => [
                 ['label' => 'Consultar Faturas', 'url' => ['/fatura/index']],
                 ['label' => 'Consultar Movimentos', 'url' => ['/movimento/index']],
-            ],
-        ],
-        ['label' => 'Pratos', 'url' => ['/prato/index']],
-        ['label' => 'Cozinhas', 'url' => ['/cozinha/index']],
-        ['label' => 'Preçário', 'url' => ['/valor/update']],
-        ['label' => 'Utilizadores', 'url' => ['/user/index']],
+            ]],
+            ['label' => 'Pratos', 'url' => ['/prato/index']],
+            ['label' => 'Cozinhas', 'url' => ['/cozinha/index']],
+            ['label' => 'Preçário', 'url' => ['/valor/update']],
+            ['label' => 'Utilizadores', 'url' => ['/user/index']],
+            ['label' => 'Os meus dados', 'url' => ['/profile/view', 'user_id' => $userId]],
+        ];
+    } elseif ($isFuncionario) {
+        $menuItems = [
+            ['label' => 'Ementas', 'url' => ['/ementa/index']],
+            ['label' => 'Senhas', 'url' => ['/senha/index']],
+            ['label' => 'Pratos', 'url' => ['/prato/index']],
+            ['label' => 'Cozinhas', 'url' => ['/cozinha/index']],
+            ['label' => 'Utilizadores', 'url' => ['/user/index']],
+            ['label' => 'Os meus dados', 'url' => ['/profile/view', 'user_id' => $userId]],
+        ];
+    }
 
-        ['label' => 'Os meus dados', 'url' => ['/profile/view', 'user_id' => $userId]],
-    ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     }

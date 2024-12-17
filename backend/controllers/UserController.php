@@ -5,7 +5,9 @@ namespace backend\controllers;
 use app\models\Cozinha;
 use app\models\Profile;
 use app\models\User;
+use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,6 +25,20 @@ class UserController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view'],
+                            'roles' => ['funcionario'],
+                        ],
+                        [
+                            'allow' => true,
+                            'roles' => ['administrador'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -33,6 +49,7 @@ class UserController extends Controller
         );
     }
 
+
     /**
      * Lists all User models.
      *
@@ -42,7 +59,10 @@ class UserController extends Controller
 
         $users = User::find()->all();
 
-        return $this->render('index' , ['users' => $users]);
+        $userId = Yii::$app->user->id;
+        $isAdmin = Yii::$app->authManager->getRolesByUser($userId) && in_array('administrador', array_keys(Yii::$app->authManager->getRolesByUser($userId)));
+
+        return $this->render('index' , ['users' => $users , 'isAdmin' => $isAdmin]);
 
     }
 

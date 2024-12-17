@@ -93,7 +93,9 @@ if ($error !== null) {
                         <td class="project-actions text-center">
                             <div class="btn-group">
                                 <?= Html::a('<i class="fas fa-folder"></i>', ['user/view', 'user_id' => $user->id], ['class' => 'btn btn-primary btn-sm']) ?>
+                                <?php if ($isAdmin): ?>
                                 <?= Html::a('<i class="fas fa-pencil-alt white-icon"></i>', ['user/update', 'id' => $user->id], ['class' => 'btn btn-info btn-sm']) ?>
+                                <?php endif; ?>
                             </div>
                         </td>
                     </tr>

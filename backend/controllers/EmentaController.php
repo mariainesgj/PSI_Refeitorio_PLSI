@@ -8,6 +8,7 @@ use app\models\EmentaSearch;
 use app\models\Prato;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -25,6 +26,20 @@ class EmentaController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view' ,'create' ,'update'],
+                            'roles' => ['funcionario'],
+                        ],
+                        [
+                            'allow' => true,
+                            'roles' => ['administrador'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -117,6 +132,9 @@ class EmentaController extends Controller
      */
     public function actionView($id)
     {
+        $userId = Yii::$app->user->id;
+        $isAdmin = Yii::$app->authManager->getRolesByUser($userId) && in_array('administrador', array_keys(Yii::$app->authManager->getRolesByUser($userId)));
+
         $model = $this->findModel($id);
 
         $pratos = Prato::find()->all();
@@ -132,6 +150,7 @@ class EmentaController extends Controller
             'model' => $model,
             'pratosMap' => $pratosMap,
             'cozinha' => $cozinha,
+            'isAdmin' => $isAdmin
         ]);
     }
 
