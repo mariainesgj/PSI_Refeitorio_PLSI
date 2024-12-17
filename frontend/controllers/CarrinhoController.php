@@ -250,10 +250,14 @@ class CarrinhoController extends Controller
         $linhaCarrinho->carrinho_id = $carrinho->id;
         $linhaCarrinho->prato_id = $pratoId;
         $linhaCarrinho->ementa_id = $id;
-        $linhaCarrinho->save();
+        if ($linhaCarrinho->save()) {
+            Yii::$app->session->setFlash('success', 'Senha adicionada com sucesso ao carrinho.');
+            return $this->redirect(['site/index']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar adicionar a senha ao carrinho. Por favor, tente novamente.');
+            return $this->redirect(['site/index']);
+        }
 
-
-        return $this->redirect(['site/index']);
     }
 
     /**

@@ -23,21 +23,23 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::class,
+                'class' => \yii\filters\AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['login', 'error'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['update-reserva'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['administrador', 'funcionario'],
+                    ],
+                    [
+                        'allow' => false,
                     ],
                 ],
             ],
@@ -45,11 +47,11 @@ class SiteController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
-                    'update-reserva' => ['post'],
                 ],
             ],
         ];
     }
+
 
 
     /**
@@ -235,7 +237,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            $user = Yii::$app->user->identity;
+
+            if (Yii::$app->authManager->checkAccess($user->id, 'administrador') ||
+                Yii::$app->authManager->checkAccess($user->id, 'funcionario')) {
+                return $this->goBack();
+            } else {
+                Yii::$app->user->logout();
+                Yii::$app->session->setFlash('error', 'Não tem permissão para aceder ao backend.');
+                return $this->redirect('http://localhost/refeitorio/frontend/web/index.php?r=site%2Flogin');
+            }
         }
 
         $model->password = '';
@@ -244,6 +255,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
 
     /**
      * Logout action.

@@ -228,7 +228,6 @@ class SiteController extends Controller
         $model = new SignupForm();
 
         if ($model->load(Yii::$app->request->post())) {
-            //var_dump(Yii::$app->request->post());exit;
             $user = $model->signup();
 
             if ($user) {
@@ -241,16 +240,26 @@ class SiteController extends Controller
                 $profile->role = $model->role;
                 $profile->user_id = $user->id;
                 $profile->cozinha_id = (int) $model->cozinha_id;
-                //var_dump($profile);exit;
+
                 if ($profile->save()) {
-                    Yii::$app->session->setFlash('success', 'Obrigado pelo registo. Por favor, aguarde a aprovação da sua conta por parte dos serviços administrativos.');
+
+                    $auth = Yii::$app->authManager;
+                    $role = $auth->getRole($profile->role);
+                    if ($role) {
+                        $auth->assign($role, $user->id);
+                    } else {
+                        Yii::warning("Tentativa de atribuir um role inválido: {$profile->role}");
+                    }
+
+                    Yii::$app->session->setFlash('success', 'Obrigado pelo registo. Por favor, aguarde a aprovação da sua conta.');
                     return $this->redirect(['site/login']);
                 } else {
-                    echo json_encode($profile->getErrors()); exit;
                     Yii::$app->session->setFlash('error', 'Ocorreu um erro ao criar o perfil do utilizador.');
+                    echo json_encode($profile->getErrors());
+                    exit;
                 }
             } else {
-                Yii::$app->session->setFlash('error', 'Ocorreu um erro, por favor tente mais tarde.');
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao criar o utilizador. Tente novamente mais tarde.');
             }
         }
 

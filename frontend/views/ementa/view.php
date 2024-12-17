@@ -9,9 +9,6 @@ use yii\widgets\ActiveForm;
 
 /** @var array $pratos */
 
-$senhaExistente = Senha::find()
-    ->where(['user_id' => Yii::$app->user->id, 'data' => $model->data])
-    ->one();
 ?>
 
 <div class="ementa-view">
@@ -47,20 +44,27 @@ $senhaExistente = Senha::find()
                 </div>
 
                 <div class="mb-3">
-                    <label style="font-size: 17px; padding-bottom: 0.5vh">Selecione o prato:</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="prato" id="pratoNormal" value="<?= $model->prato_normal ?>" <?= !$model->prato_normal ? 'disabled' : '' ?>>
-                        <label class="form-check-label" for="pratoNormal">
-                            <?= Html::encode(isset($pratosMap[$model->prato_normal]) ? $pratosMap[$model->prato_normal]->designacao : 'N/A') ?> (Principal)
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="prato" id="pratoVegetariano" value="<?= $model->prato_vegetariano ?>" <?= !$model->prato_vegetariano ? 'disabled' : '' ?>>
-                        <label class="form-check-label" for="pratoVegetariano">
-                            <?= Html::encode(isset($pratosMap[$model->prato_vegetariano]) ? $pratosMap[$model->prato_vegetariano]->designacao : 'N/A') ?> (Vegetariano)
-                        </label>
-                    </div>
+                    <?php if ($linhasExist): ?>
+                        <p style="font-size: 17px; color: red; padding-bottom: 0.5vh">
+                            Já tem uma senha para esta data no carrinho.
+                        </p>
+                    <?php elseif (!$senhaExistente): ?>
+                        <label style="font-size: 17px; padding-bottom: 0.5vh">Selecione o prato que deseja reservar:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="prato" id="pratoNormal" value="<?= $model->prato_normal ?>" <?= !$model->prato_normal ? 'disabled' : '' ?>>
+                            <label class="form-check-label" for="pratoNormal">
+                                <?= Html::encode(isset($pratosMap[$model->prato_normal]) ? $pratosMap[$model->prato_normal]->designacao : 'N/A') ?> (Principal)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="prato" id="pratoVegetariano" value="<?= $model->prato_vegetariano ?>" <?= !$model->prato_vegetariano ? 'disabled' : '' ?>>
+                            <label class="form-check-label" for="pratoVegetariano">
+                                <?= Html::encode(isset($pratosMap[$model->prato_vegetariano]) ? $pratosMap[$model->prato_vegetariano]->designacao : 'N/A') ?> (Vegetariano)
+                            </label>
+                        </div>
+                    <?php endif; ?>
                 </div>
+
 
                 <div class="mb-4 text-center">
                     <?php if ($senhaExistente): ?>
@@ -75,7 +79,6 @@ $senhaExistente = Senha::find()
                         <?php ActiveForm::end(); ?>
                     <?php endif; ?>
                 </div>
-
             </div>
 
             <div class="text-center col-md-6">

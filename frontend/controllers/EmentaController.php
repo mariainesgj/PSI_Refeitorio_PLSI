@@ -5,7 +5,9 @@ namespace frontend\controllers;
 use app\models\Cozinha;
 use app\models\Ementa;
 use app\models\EmentaSearch;
+use app\models\Linhascarrinho;
 use app\models\Prato;
+use app\models\Senha;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -119,6 +121,17 @@ class EmentaController extends Controller
     {
         $model = $this->findModel($id);
 
+        $senhaExistente = Senha::find()
+            ->where(['user_id' => Yii::$app->user->id, 'data' => $model->data])
+            ->one();
+
+        $linhasExist = Linhascarrinho::find()
+            ->joinWith('carrinho')
+            ->where(['carrinhos.user_id' => Yii::$app->user->id])
+            ->andWhere(['linhascarrinhos.ementa_id' => $id])
+            ->one();
+
+        //var_dump($linhasExist);exit;
         $pratos = Prato::find()->all();
 
         $pratosMap = [];
@@ -132,6 +145,8 @@ class EmentaController extends Controller
             'model' => $model,
             'pratosMap' => $pratosMap,
             'cozinha' => $cozinha,
+            'senhaExistente' => $senhaExistente,
+            'linhasExist' => $linhasExist
         ]);
     }
 

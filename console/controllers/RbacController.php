@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use Yii;
 use yii\console\Controller;
 
 class RbacController extends Controller{
@@ -36,40 +37,31 @@ class RbacController extends Controller{
         echo 'Rbac and roles initialized.';
     }
 
-}
 
-
-/*
- * namespace frontend\controllers;
-
-use Yii;
-use yii\web\Controller;
-use app\models\Profile;
-use app\models\User;
-
-class ProfileController extends Controller
-{
-    public function actionCreate()
+    public function actionAssignAdmin($userId) //php yii rbac/assign-admin 1 (id)
     {
-        $model = new Profile();
+        $auth = Yii::$app->authManager;
+        $adminRole = $auth->getRole('administrador');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            if ($model->isNewRecord) {
-                $model->role = 'aluno';
-            }
-
-            $model->save();
-            $auth = Yii::$app->authManager;
-            $role = $auth->getRole($model->role);
-            $auth->assign($role, Yii::$app->user->id);
-
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($adminRole) {
+            $auth->assign($adminRole, $userId);
+            echo "Role 'administrador' atribuída ao usuário com ID: $userId\n";
+        } else {
+            echo "Role 'administrador' não encontrada.\n";
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
+
+    public function actionAssignFuncionario($userId) //php yii rbac/assign-funcionario 6
+    {
+        $auth = Yii::$app->authManager;
+        $adminRole = $auth->getRole('funcionario');
+
+        if ($adminRole) {
+            $auth->assign($adminRole, $userId);
+            echo "Role 'funcionario' atribuída ao usuário com ID: $userId\n";
+        } else {
+            echo "Role 'funcionario' não encontrada.\n";
+        }
+    }
+
 }
-*/
