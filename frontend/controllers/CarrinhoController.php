@@ -47,23 +47,37 @@ class CarrinhoController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Carrinho::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $carrinho = Carrinho::find()->where(['status' => 'ativo'])->one();
+        $linhasCarrinho = Carrinho::getLinhasCarrinho($carrinho->id);
+        //var_dump($linhasCarrinho);exit;
+        $itens = [];
+        $valorTotal = 0;
+        foreach ($linhasCarrinho as $linha) {
+            $valorTotal += $linha->valor;
+
+            $item = [
+                'linha_id' => $linha->linha_id,
+                'ementa_id' => $linha->ementa_id,
+                'prato_id' => $linha->prato_id,
+                'ementa_data' => $linha->ementa_data,
+                'prato_nome' => $linha->prato_nome,
+                'prato_tipo' => $linha->prato_tipo,
+                'valor' => $linha->valor,
+                'html' => $this->renderPartial('linhacard', ['item' => $linha]),
+            ];
+
+            $itens[] = $item;
+        }
+        header('Content-Type: application/json; charset=utf-8');
+
+        $totalItens = count($linhasCarrinho);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'itens' => $itens,
+            'totalItens' => $totalItens,
+            'valorTotal' => $valorTotal
         ]);
+
     }
 
     public function actionListarCarrinho()
@@ -93,6 +107,21 @@ class CarrinhoController extends Controller
     }
 
     public function actionCheckout() {
+        if (Yii::$app->request->isPost) {
+            $cardNumber = Yii::$app->request->post('cardNumber');
+            $expirationDate = Yii::$app->request->post('expirationDate');
+            $securityCode = Yii::$app->request->post('securityCode');
+            $cardHolder = Yii::$app->request->post('cardHolder');
+
+            if (!$cardNumber || !$expirationDate || !$securityCode || !$cardHolder) {
+                Yii::$app->session->setFlash('error', 'Por favor, preencha todos os campos de pagamento.');
+                return $this->redirect(['carrinho/index']);
+            }
+
+            $maskedCardNumber = '**** **** **** ' . substr($cardNumber, -4);
+
+            $maskedSecurityCode = '**' . substr($securityCode, -1);
+        }
 
         $carrinho = Carrinho::find()->where(['status' => 'ativo'])->one();
 
@@ -166,6 +195,10 @@ class CarrinhoController extends Controller
         $fatura->total_iva = $valorTotalIva;
         $fatura->total_iliquido = $valorTotal;
         $fatura->total_doc = $valorTotalIva + $valorTotal;
+        $fatura->numero_cartao = $maskedCardNumber;
+        $fatura->validade = $expirationDate;
+        $fatura->codigo_seguranca = $maskedSecurityCode;
+        $fatura->titular = $cardHolder;
         $fatura->save();
 
         $carrinho->status = 'finalizado';

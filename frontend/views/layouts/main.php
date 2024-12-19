@@ -110,7 +110,9 @@ AppAsset::register($this);
         </span>
                     <span id="valor-total" style="text-align: right;"></span>
                 </div>
-                <?= Html::a('Checkout', ['carrinho/checkout'], ['class'=>'btn btn-primary']) ?>
+                <div id="checkout-btn" style="width: 100%; display: none;">
+                    <?= Html::a('Checkout', ['carrinho/index'], ['class' => 'btn btn-primary w-100']) ?>
+                </div>
             </div>
 
         </div>
@@ -161,6 +163,12 @@ AppAsset::register($this);
                         $('#valor-total').html(
                             `${valorTotal.toFixed(2)}€`
                         );
+
+                        if (quantidadeItens >= 1) {
+                            $('#checkout-btn').show();
+                        } else {
+                            $('#checkout-btn').hide();
+                        }
 
                     } else {
                         $('#card-itens').html('<div>Erro: resposta não é um array válido.</div>');

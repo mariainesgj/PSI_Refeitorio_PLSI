@@ -13,6 +13,10 @@ use Yii;
  * @property string $data
  * @property int $user_id
  * @property float $total_doc
+ * @property string|null $numero_cartao
+ * @property string|null $validade
+ * @property string|null $codigo_seguranca
+ * @property string|null $titular
  *
  * @property Linhasfatura[] $linhasfaturas
  * @property User $user
@@ -22,6 +26,7 @@ class Fatura extends \yii\db\ActiveRecord
     public $street;
     public $locale;
     public $postalCode;
+
     /**
      * {@inheritdoc}
      */
@@ -37,9 +42,10 @@ class Fatura extends \yii\db\ActiveRecord
     {
         return [
             [['total_iliquido', 'total_iva', 'total_doc', 'data', 'user_id'], 'required'],
-            [['total_iliquido', 'total_iva' ,'total_doc'], 'number'],
+            [['total_iliquido', 'total_iva', 'total_doc'], 'number'],
             [['data'], 'safe'],
             [['user_id'], 'integer'],
+            [['numero_cartao', 'validade', 'codigo_seguranca', 'titular'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -56,6 +62,10 @@ class Fatura extends \yii\db\ActiveRecord
             'data' => 'Data',
             'user_id' => 'User ID',
             'total_doc' => 'Total Documento',
+            'numero_cartao' => 'Número do Cartão',
+            'validade' => 'Validade',
+            'codigo_seguranca' => 'Código de Segurança',
+            'titular' => 'Titular',
         ];
     }
 
