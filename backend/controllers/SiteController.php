@@ -95,6 +95,15 @@ class SiteController extends Controller
             $servidasTotal = $this->calcularServidasTotal($activeCozaId);
         }
 
+        $dataAtual = date('Y-m-d');
+
+        $senhas = Senha::find()
+            ->joinWith(['prato', 'ementa', 'user.profile'])
+            ->where(['ementas.cozinha_id' => $activeCozaId])
+            ->andWhere(['date(senhas.data)' => $dataAtual])
+            ->andWhere(['senhas.consumido' => 1])
+            ->all();
+
         return $this->render('index', [
             'cozinhas' => $cozinhas,
             'activeCozaId' => $activeCozaId,
@@ -103,7 +112,8 @@ class SiteController extends Controller
             'porServirVegetariano' => $porServirVegetariano,
             'servidasVegetariano' => $servidasVegetariano,
             'porServirTotal' => $porServirTotal,
-            'servidasTotal' => $servidasTotal
+            'servidasTotal' => $servidasTotal,
+            'senhas' => $senhas
         ]);
     }
 
@@ -200,7 +210,7 @@ class SiteController extends Controller
             }
 
             $affectedRows = Yii::$app->db->createCommand()
-                ->update('senhas', ['consumido' => 1], ['id' => $id])
+                ->update('senhas', ['consumido' => 1 , 'lido' => new \yii\db\Expression('NOW()')], ['id' => $id])
                 ->execute();
 
             if ($affectedRows === 0) {
@@ -209,7 +219,6 @@ class SiteController extends Controller
             $userId = Yii::$app->db->createCommand("SELECT user_id FROM senhas WHERE id = :id")
                 ->bindValue(':id', $id)
                 ->queryScalar();
-
 
             return [
                 'success' => true,

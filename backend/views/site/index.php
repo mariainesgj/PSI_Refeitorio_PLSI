@@ -44,8 +44,10 @@ $this->title = 'My Yii Application';
         <?= Html::input('text', 'qrCodeInput', '', [
             'id' => 'qr-code-input',
             'class' => 'form-control',
-            'style' => 'opacity: 0;'
+            'style' => 'opacity: 0;', //1 para ficar visivel ao user
+            'autocomplete' => 'off',
         ]); ?>
+
 
         <?php ActiveForm::end(); ?>
         <div class="row justify-content-center" style="padding-top: 5vh">
@@ -147,9 +149,43 @@ $this->title = 'My Yii Application';
         </div>
     </div>
 
-
-    <div id="user-id-container" style="display:none; margin-top: 20px;">
-        <p>User ID da Reserva: <span id="user-id"></span></p>
+    <div class="senhas-list" style="margin-top: 30px">
+        <?php if (!empty($senhas)): ?>
+            <div class="list-group">
+                <?php foreach ($senhas as $senha): ?>
+                    <div class="list-group-item d-flex justify-content-between align-items-center"
+                         style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); margin-bottom: 10px; border-radius: 10px; background-color: #f8f9fa; min-height: 80px;">
+                        <div>
+                            <?= Yii::$app->formatter->asDatetime($senha->lido, 'php:H:i:s') ?>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <a><?= Html::encode($senha->user->profile->name ?? 'N/A') ?></a>
+                            <a style="font-size: 14px; color: #8e8e8e"><?= Html::encode(ucfirst($senha->user->profile->role ?? 'N/A')) ?></a>
+                        </div>
+                        <div>
+                            <?php if ($senha->prato->tipo === 'prato normal'): ?>
+                                <img src="<?= Yii::getAlias('@web/images/menu_principal.png') ?>" alt="Menu Principal" class="img-fluid" style="width: 10vw">
+                            <?php elseif ($senha->prato->tipo === 'prato vegetariano'): ?>
+                                <img src="<?= Yii::getAlias('@web/images/menu_salada.png') ?>" alt="Menu Vegetariano" class="img-fluid" style="width: 10vw">
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center">
+                <img src="<?= Yii::getAlias('@web/images/sem_senhas.png') ?>" alt="Sem senhas" class="img-fluid" style="width: 19vw">
+                <?php
+                $cozinhaAtiva = null;
+                foreach ($cozinhas as $cozinha) {
+                    if ($cozinha->id == $activeCozaId) {
+                        $cozinhaAtiva = $cozinha;
+                        break;
+                    }
+                } ?>
+                <p style="font-size: 15px; color: #8e8e8e">Ainda sem refeições servidas hoje para o <?= $cozinhaAtiva ? Html::encode($cozinhaAtiva->designacao) : 'cozinha desconhecida' ?>. Beba um café enquanto espera.</p>
+            </div>
+        <?php endif; ?>
     </div>
 
 </div>
@@ -171,6 +207,9 @@ $this->title = 'My Yii Application';
                 if (data.success) {
                     document.getElementById('user-id').textContent = data.user_id;
                     document.getElementById('user-id-container').style.display = 'block';
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const activeCozaId = urlParams.get('activeCozaId') || '';
+                    window.location.href = `?activeCozaId=${activeCozaId}&qrCodeInput=`;
                 } else {
                     alert(data.message || 'Erro ao atualizar a reserva.');
                 }
@@ -179,16 +218,16 @@ $this->title = 'My Yii Application';
     }
 
     document.getElementById('qr-code-input').addEventListener('input', function() {
-        const base64Data = this.value;
-        console.log('Valor recebido do input:', base64Data);
+        const valorTransformado = substituirCaracteres(this.value.trim());
+        console.log('Valor transformado:', valorTransformado);
 
-        if (!base64Data) {
-            console.error('O campo de input está vazio.');
+        if (!isBase64(valorTransformado)) {
+            console.error('O valor não é uma string Base64 válida.');
             return;
         }
 
         try {
-            const jsonString = atob(base64Data);
+            const jsonString = atob(valorTransformado);
             console.log('Valor decodificado:', jsonString);
 
             const data = JSON.parse(jsonString);
@@ -196,12 +235,13 @@ $this->title = 'My Yii Application';
             console.log('ID da reserva:', idReserva);
             atualizarReserva(idReserva);
         } catch (e) {
-            console.error('Erro ao decodificar ou processar o JSON:', e);
+            console.error('Erro ao processar o JSON:', e);
         }
     });
 
+
+
     document.getElementById('qr-code-input').addEventListener('blur', function() {
-        this.dispatchEvent(new Event('input'));
     });
 
     setInterval(function() {
@@ -209,4 +249,19 @@ $this->title = 'My Yii Application';
         qrInput.focus();
         qrInput.select();
     }, 1000);
+
+
+    function substituirCaracteres(input) {
+        return input.replace(/««/g, '==');
+    }
+
+    function isBase64(str) {
+        try {
+            return btoa(atob(str)) === str;
+        } catch (e) {
+            return false;
+        }
+    }
+
+
 </script>
