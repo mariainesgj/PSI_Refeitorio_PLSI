@@ -8,6 +8,7 @@ use app\models\EmentaSearch;
 use app\models\Linhascarrinho;
 use app\models\Prato;
 use app\models\Senha;
+use DateTime;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -141,12 +142,21 @@ class EmentaController extends Controller
 
         $cozinha = Cozinha::findOne($model->cozinha_id);
 
+        $ementaDateTime = new DateTime($model->data);
+        $dataLimite = $ementaDateTime->format('Y-m-d') . ' 11:00:00';
+
+        $now = new DateTime();
+
+        $canMarkMeal = $now < new DateTime($dataLimite);
+
+
         return $this->render('view', [
             'model' => $model,
             'pratosMap' => $pratosMap,
             'cozinha' => $cozinha,
             'senhaExistente' => $senhaExistente,
-            'linhasExist' => $linhasExist
+            'linhasExist' => $linhasExist,
+            'canMarkMeal' => $canMarkMeal
         ]);
     }
 

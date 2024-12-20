@@ -71,7 +71,7 @@
             </div>
         </div>
     </div>
-
+</div>
     <style>
         .p-5, .jumbotron {
             padding: 1rem !important;
@@ -95,7 +95,7 @@
             gap: 10px;
             padding-bottom: 20px;
             align-items: center;
-            width: 100%;
+            width: 350px;
             display: flex;
             justify-content: center;
         }
@@ -142,4 +142,4 @@
             justify-content: center;
         }
     </style>
-</div>
+

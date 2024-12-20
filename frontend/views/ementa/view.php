@@ -48,7 +48,7 @@ use yii\widgets\ActiveForm;
                         <p style="font-size: 17px; color: red; padding-bottom: 0.5vh">
                             Já tem uma senha para esta data no carrinho.
                         </p>
-                    <?php elseif (!$senhaExistente): ?>
+                    <?php elseif (!$senhaExistente && $canMarkMeal): ?>
                         <label style="font-size: 17px; padding-bottom: 0.5vh">Selecione o prato que deseja reservar:</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="prato" id="pratoNormal" value="<?= $model->prato_normal ?>" <?= !$model->prato_normal ? 'disabled' : '' ?>>
@@ -69,16 +69,21 @@ use yii\widgets\ActiveForm;
                 <div class="mb-4 text-center">
                     <?php if ($senhaExistente): ?>
                         <?= Html::a('Ver Senha', ['senha/view', 'id' => $senhaExistente->id , 'data' => Yii::$app->formatter->asDate($model->data, 'php:Y-m-d')], ['class' => 'btn btn-primary']) ?>
-                    <?php else: ?>
+                    <?php elseif ($canMarkMeal): ?>
                         <?php $form = ActiveForm::begin(['action' => ['carrinho/create'], 'method' => 'POST']); ?>
-                        <?= Html::hiddenInput('ementa_id',  $model->id) ?>
+                        <?= Html::hiddenInput('ementa_id', $model->id) ?>
                         <?= Html::hiddenInput('prato_id', null, ['id' => 'pratoId']) ?>
 
                         <button type="submit" class="btn btn-primary">Adicionar ao carrinho</button>
 
                         <?php ActiveForm::end(); ?>
+                    <?php else: ?>
+                        <div class="alert alert-danger">
+                            O prazo para marcar esta refeição já expirou.
+                        </div>
                     <?php endif; ?>
                 </div>
+
             </div>
 
             <div class="text-center col-md-6">
