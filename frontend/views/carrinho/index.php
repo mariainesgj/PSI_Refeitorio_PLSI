@@ -89,7 +89,7 @@ use yii\helpers\Html;
                                 <form id="paymentForm">
                                     <div class="mb-3">
                                         <label for="cardNumber" class="form-label">Número do Cartão</label>
-                                        <input type="text" class="form-control" id="cardNumber" placeholder="Insira o número do cartão" required>
+                                        <input type="text" class="form-control" id="cardNumber" placeholder="Insira o número do cartão" maxlength="19" required>
                                     </div>
 
                                     <div class="row">
@@ -114,13 +114,12 @@ use yii\helpers\Html;
                                 <a href="<?= \yii\helpers\Url::to(['carrinho/checkout']) ?>" class="btn btn-primary" id="confirmCheckout">Confirmar</a>
                             </div>
 
-                            <div id="loadingAnimation" style="display: none;">
+                            <div id="loadingAnimation" style="display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
                                 <div class="spinner-border text-primary" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
-                                <p>Processando pagamento...</p>
+                                <p>A processar pagamento...</p>
                             </div>
-
 
                             <form id="paymentDataForm" method="post" action="<?= \yii\helpers\Url::to(['carrinho/checkout']) ?>" style="display: none;">
                                 <?= \yii\helpers\Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
@@ -165,8 +164,19 @@ use yii\helpers\Html;
         document.getElementById('hiddenCardHolder').value = cardHolder;
 
         setTimeout(function() {
-            document.getElementById('paymentDataForm').submit();
-        }, 3000);  // 3 segundos para simular o processamento
+            const loadingContainer = document.getElementById('loadingAnimation');
+            loadingContainer.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#28a745" class="bi bi-check-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+                <path d="M10.97 4.97a.75.75 0 0 1 1.06 1.06L7.477 10.06a.75.75 0 0 1-1.08.02L5.324 8.354a.75.75 0 1 1 1.06-1.06l.94.94 3.646-3.646z"/>
+            </svg>
+            <p>Pagamento efetuado com sucesso</p>
+        `;
+
+            setTimeout(function() {
+                document.getElementById('paymentDataForm').submit();
+            }, 1500);
+        }, 3000);
     });
 
     function formatCardNumber(cardNumber) {
@@ -178,6 +188,13 @@ use yii\helpers\Html;
         const [year, month] = expirationDate.split('-');
         return `${month}/${year.slice(2)}`;
     }
+
+    document.getElementById('cardNumber').addEventListener('input', function (event) {
+        const input = event.target;
+        let cardNumber = input.value.replace(/[^0-9]/g, '');
+        cardNumber = cardNumber.match(/.{1,4}/g)?.join('-') || '';
+        input.value = cardNumber;
+    });
 
 </script>
 
@@ -200,13 +217,14 @@ use yii\helpers\Html;
     }
 
     #loadingAnimation {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        display: none;
         justify-content: center;
-        margin-top: 20px;
-        font-size: 1.2rem;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
     }
+
 
     .spinner-border {
         width: 3rem;
@@ -224,5 +242,29 @@ use yii\helpers\Html;
         color: #28a745;
     }
 
+    .parent-container {
+        position: relative;
+        display: flex;
+    }
+
+    #loadingAnimation svg {
+        margin-bottom: 10px;
+        animation: scaleIn 0.5s ease-in-out forwards;
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+
+    #loadingAnimation p {
+        font-weight: lighter;
+        color: #28a745;
+        margin-top: 10px;
+    }
 
 </style>
