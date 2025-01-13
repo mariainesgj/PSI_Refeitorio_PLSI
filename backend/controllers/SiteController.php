@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use app\models\Cozinha;
+use app\models\Movimento;
 use app\models\Senha;
 use common\models\LoginForm;
 use Yii;
@@ -219,6 +220,17 @@ class SiteController extends Controller
             $userId = Yii::$app->db->createCommand("SELECT user_id FROM senhas WHERE id = :id")
                 ->bindValue(':id', $id)
                 ->queryScalar();
+
+            $movimento = new Movimento();
+            $movimento->tipo = 'debito';
+            $movimento->data = date('Y-m-d H:i:s');
+            $movimento->origem = $id;
+            $movimento->quantidade = 1;
+            $movimento->user_id = $userId;
+            if (!$movimento->save()) {
+                Yii::$app->session->setFlash('error', 'Erro ao criar o movimento.');
+                throw new \Exception("Erro ao criar o movimento.");
+            }
 
             return [
                 'success' => true,

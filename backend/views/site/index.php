@@ -191,7 +191,6 @@ $this->title = 'My Yii Application';
 </div>
 
 <script>
-
     function atualizarReserva(idReserva) {
         fetch('<?= \yii\helpers\Url::to(['site/update-reserva']) ?>', {
             method: 'POST',
@@ -201,7 +200,6 @@ $this->title = 'My Yii Application';
             },
             body: JSON.stringify({ id: idReserva })
         })
-
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -218,12 +216,15 @@ $this->title = 'My Yii Application';
     }
 
     document.getElementById('qr-code-input').addEventListener('input', function() {
-        const valorTransformado = substituirCaracteres(this.value.trim());
+        const rawValue = this.value;
+        console.log('Valor original:', rawValue);
+
+        const valorTransformado = substituirCaracteres(rawValue);
         console.log('Valor transformado:', valorTransformado);
 
         if (!isBase64(valorTransformado)) {
-            console.error('O valor não é uma string Base64 válida.');
-            return;
+            console.error('O valor não é uma string Base64 válida:', valorTransformado);
+            //return;
         }
 
         try {
@@ -235,13 +236,8 @@ $this->title = 'My Yii Application';
             console.log('ID da reserva:', idReserva);
             atualizarReserva(idReserva);
         } catch (e) {
-            console.error('Erro ao processar o JSON:', e);
+            console.error('Erro ao processar a string JSON:', e);
         }
-    });
-
-
-
-    document.getElementById('qr-code-input').addEventListener('blur', function() {
     });
 
     setInterval(function() {
@@ -250,18 +246,21 @@ $this->title = 'My Yii Application';
         qrInput.select();
     }, 1000);
 
-
     function substituirCaracteres(input) {
-        return input.replace(/««/g, '==');
+        let result = input.replace(/««/g, '==').replace(/«/g, '=');
+        console.log('Após substituir caracteres inválidos:', result);
+        return result;
     }
+
 
     function isBase64(str) {
         try {
-            return btoa(atob(str)) === str;
+            if (str === '' || typeof str !== 'string') {
+                return false;
+            }
+            return btoa(atob(str)) === str.replace(/=/g, '');
         } catch (e) {
             return false;
         }
     }
-
-
 </script>
