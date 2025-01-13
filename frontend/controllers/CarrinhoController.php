@@ -202,6 +202,7 @@ class CarrinhoController extends Controller
         $fatura->save();
 
         $carrinho->status = 'finalizado';
+        $carrinho->subtotal = $valorTotal;
         if ($carrinho->save()) {
             return $this->redirect(['fatura/view', 'id' => $fatura->id]);
         } else {
