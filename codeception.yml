@@ -1,9 +1,29 @@
-# global codeception file to run tests from all apps
+# Global configuration for Codeception
+
 include:
-    - common
-    - frontend
     - backend
+    - frontend
+
 paths:
     output: console/runtime/output
+    tests: tests   # Caminho principal para os testes
+    data: tests/_data  # Caminho para os dados dos testes
+    support: tests/_support  # Caminho para os helpers de teste
+
 settings:
     colors: true
+
+suites:
+    backend:
+        path: backend/tests  # Caminho para os testes do backend
+        actor: BackendTester
+        modules:
+            enabled:
+                - Asserts
+
+    frontend:
+        path: frontend/tests  # Caminho para os testes do frontend
+        actor: FrontendTester
+        modules:
+            enabled:
+                - Asserts

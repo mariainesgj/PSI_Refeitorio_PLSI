@@ -12,7 +12,7 @@
         "irc": "ircs://irc.libera.chat:6697/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "php": ">=7.4.0",
         "yiisoft/yii2": "~2.0.51",
@@ -25,7 +25,7 @@
         "yiisoft/yii2-gii": "~2.2.0",
         "yiisoft/yii2-faker": "~2.0.0",
         "phpunit/phpunit": "~9.5.0",
-        "codeception/codeception": "^5.0.0 || ^4.0",
+        "codeception/codeception": "^5.2@dev",
         "codeception/lib-innerbrowser": "^4.0 || ^3.0 || ^1.1",
         "codeception/module-asserts": "^3.0 || ^1.1",
         "codeception/module-yii2": "^1.1",
