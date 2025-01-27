@@ -12,6 +12,10 @@ use yii\widgets\ActiveForm;
     <div class="container mt-6">
         <div class="row d-flex align-items-center">
             <div class="col-md-6">
+                <div class="mb-4">
+                    <?= Html::a('Voltar', ['index'], ['class' => 'btn btn-secondary']) ?>
+                </div>
+
                 <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Definir ementa</h4>
                 <?php $form = ActiveForm::begin(['options' => ['class' => 'needs-validation', 'novalidate' => true]]); ?>
 

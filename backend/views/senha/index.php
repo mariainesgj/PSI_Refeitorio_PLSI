@@ -56,9 +56,9 @@ use yii\helpers\Html;
             <p class="text-center">Nenhuma cozinha encontrada.</p>
         <?php endif; ?>
 
-        <p class="text-center">
-            <?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
-        </p>
+        <!--<p class="text-center">
+            < ?= Html::a('Adicionar', ['create'], ['class' => 'btn btn-primary ml-2']) ?>
+        </p>-->
     </div>
 </div>
 

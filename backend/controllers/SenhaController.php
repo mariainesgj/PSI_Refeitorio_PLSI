@@ -33,7 +33,7 @@ class SenhaController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'view', 'create'],
+                            'actions' => ['index', 'view'],
                             'roles' => ['funcionario'],
                         ],
                         [

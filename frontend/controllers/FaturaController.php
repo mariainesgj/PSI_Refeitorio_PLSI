@@ -47,7 +47,11 @@ class FaturaController extends Controller
 
         $userId = Yii::$app->user->id;
 
-        $faturas = Fatura::find()->where(['user_id' => $userId])->all();
+        $faturas = Fatura::find()
+            ->where(['user_id' => $userId])
+            ->orderBy(['data' => SORT_DESC])
+            ->all();
+
 
         return $this->render('index', [
             'faturas' => $faturas,

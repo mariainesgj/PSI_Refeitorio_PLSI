@@ -71,9 +71,9 @@ use yii\helpers\Html;
 
         </div>
 
-        <div class="form-group text-center mt-4">
-            <?= Html::a('Download', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        </div>
+        <!--<div class="form-group text-center mt-4">
+            < ?= Html::a('Download', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        </div>-->
     </div>
 </div>
 

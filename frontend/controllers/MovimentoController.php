@@ -43,7 +43,7 @@ class MovimentoController extends Controller
         $userId = Yii::$app->user->id;
 
         $dataProvider = new ActiveDataProvider([
-            'query' => Movimento::find()->where(['user_id' => $userId]),
+            'query' => Movimento::find()->where(['user_id' => $userId])->orderBy(['id' => SORT_DESC]),
             'pagination' => [
                 'pageSize' => 10,
             ],

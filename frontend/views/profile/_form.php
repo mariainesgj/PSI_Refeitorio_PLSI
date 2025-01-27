@@ -6,12 +6,19 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var app\models\Profile $model */
 /** @var yii\widgets\ActiveForm $form */
+
+$userId = Yii::$app->user->id;
+
 ?>
 
 <div class="my-form">
     <div class="container mt-6">
         <div class="row d-flex align-items-center">
             <div class="col-md-6">
+                <div class="mb-4">
+                    <?= Html::a('Voltar', ['view', 'user_id' => $userId], ['class' => 'btn btn-secondary']) ?>
+                </div>
+
                 <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Editar os meus dados</h4>
                 <?php $form = ActiveForm::begin(['options' => ['class' => 'needs-validation', 'novalidate' => true]]); ?>
 
