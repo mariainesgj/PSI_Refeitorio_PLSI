@@ -47,7 +47,8 @@ class CarrinhoController extends Controller
      */
     public function actionIndex()
     {
-        $carrinho = Carrinho::find()->where(['status' => 'ativo'])->one();
+        $user_id = Yii::$app->user->id;
+        $carrinho = Carrinho::find()->where(['status' => 'ativo', 'user_id' => $user_id])->one();
         $linhasCarrinho = Carrinho::getLinhasCarrinho($carrinho->id);
         //var_dump($linhasCarrinho);exit;
         $itens = [];
@@ -82,7 +83,8 @@ class CarrinhoController extends Controller
 
     public function actionListarCarrinho()
     {
-        $carrinho = Carrinho::find()->where(['status' => 'ativo'])->one();
+        $user_id = Yii::$app->user->id;
+        $carrinho = Carrinho::find()->where(['status' => 'ativo', 'user_id' => $user_id])->one();
         $linhasCarrinho = Carrinho::getLinhasCarrinho($carrinho->id);
         //var_dump($linhasCarrinho);exit;
         $itens = [];
