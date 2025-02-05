@@ -96,7 +96,7 @@ use yii\grid\GridView;
                 search: "Pesquisar:",
                 info: "A exibir os utilizadores _START_ a _END_",
                 infoEmpty: "Sem utilizadores para exibir",
-                infoFiltered: " (dos _MAX_ utilizadores existentes)",
+                infoFiltered: " (dos _MAX_ faturas existentes)",
             },
             layout: {
                 topStart: {

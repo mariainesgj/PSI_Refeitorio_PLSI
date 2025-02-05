@@ -160,8 +160,9 @@ class EmentaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
-    {
+
+    public function actionCreate(){
+
         $model = new Ementa();
         $pratosNormais = Prato::find()->where(['tipo' => 'prato normal'])->all();
         $pratosNormaisList = \yii\helpers\ArrayHelper::map($pratosNormais, 'id', 'designacao');
@@ -171,11 +172,21 @@ class EmentaController extends Controller
         $sopasList = \yii\helpers\ArrayHelper::map($sopas, 'id', 'designacao');
 
         $cozinhas = Cozinha::find()->all();
-        $cozinhasList = \yii\helpers\ArrayHelper::map($cozinhas , 'id' , 'designacao');
+        $cozinhasList = \yii\helpers\ArrayHelper::map($cozinhas, 'id', 'designacao');
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $exists = Ementa::find()
+                    ->where(['cozinha_id' => $model->cozinha_id, 'data' => $model->data])
+                    ->exists();
+
+                if ($exists) {
+                    Yii::$app->session->setFlash('error', 'Já existe uma ementa para esta cozinha na data selecioanda.');
+                } else {
+                    if ($model->save()) {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -188,7 +199,8 @@ class EmentaController extends Controller
             'pratosVegetarianosList' => $pratosVegetarianosList,
             'sopasList' => $sopasList
         ]);
-    }
+}
+
 
     /**
      * Updates an existing Ementa model.

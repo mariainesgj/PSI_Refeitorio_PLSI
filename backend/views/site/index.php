@@ -203,7 +203,7 @@ $this->title = 'My Yii Application';
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    document.getElementById('user-id').textContent = data.user_id;
+
                     document.getElementById('user-id-container').style.display = 'block';
                     const urlParams = new URLSearchParams(window.location.search);
                     const activeCozaId = urlParams.get('activeCozaId') || '';

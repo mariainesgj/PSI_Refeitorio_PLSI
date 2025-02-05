@@ -28,6 +28,7 @@ class FaturaSearch extends Fatura
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);

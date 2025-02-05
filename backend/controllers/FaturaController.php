@@ -61,11 +61,19 @@ class FaturaController extends Controller
         $searchModel = new FaturaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $dataProvider->setSort([
+            'defaultOrder' => [
+                'data' => SORT_DESC,
+                'id' => SORT_DESC,
+            ]
+        ]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
 
     /**
      * Displays a single Fatura model.

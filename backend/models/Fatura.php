@@ -81,7 +81,7 @@ class Fatura extends \yii\db\ActiveRecord
 
     public function getUserProfile()
     {
-        return $this->hasOne(Profile::class, ['id' => 'user_id']);
+        return $this->hasOne(Profile::class, ['user_id' => 'user_id']);
     }
 
 

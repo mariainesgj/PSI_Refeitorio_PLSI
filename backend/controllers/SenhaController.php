@@ -102,10 +102,14 @@ class SenhaController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
+
+        $userId = Yii::$app->user->id;
+        $isAdmin = Yii::$app->authManager->getRolesByUser($userId) && in_array('administrador', array_keys(Yii::$app->authManager->getRolesByUser($userId)));
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'isAdmin' => $isAdmin
         ]);
     }
 

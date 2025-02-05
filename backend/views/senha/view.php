@@ -11,6 +11,9 @@ use yii\helpers\Html;
     <div class="container mt-6">
         <div class="row d-flex align-items-center">
             <div class="col-md-6">
+                <div class="mb-4">
+                    <?= Html::a('Voltar', ['index'], ['class' => 'btn btn-secondary']) ?>
+                </div>
                 <h4 class="mb-4" style="color: #50A9B4; text-decoration: underline;">Detalhes da Senha #<?= Html::encode($model->id) ?></h4>
 
                 <div class="mb-3">
@@ -72,9 +75,11 @@ use yii\helpers\Html;
             </div>
         </div>
 
+        <?php if ($isAdmin): ?>
         <div class="form-group text-center mt-4">
             <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
+        <?php endif; ?>
     </div>
 </div>
 
