@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="col-auto">
                 <?= Html::beginForm(['ementa/search'], 'get', ['class' => 'input-group']) ?>
-                <?= Html::hiddenInput('EmentaSearch[cozinha_id]', $activeCozaId) ?>
+                <?= Html::hiddenInput('EmentaSearch[cozinha_id]', $activeCozaId, ['id' => 'hidden-cozinha-id']) ?>
                 <?= Html::textInput('EmentaSearch[data]', $searchModel->data, [
                     'class' => 'form-control',
                     'placeholder' => 'Data',
@@ -100,7 +100,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => Html::encode($cozinha->designacao),
                         'content' => $menuContent,
                         'active' => $cozinha->id == $activeCozaId,
+                        'options' => ['id' => 'tab-cozinha-' . $cozinha->id],
+                        'linkOptions' => ['data-cozinha-id' => $cozinha->id]
                     ];
+
                 }, $cozinhas),
             ]); ?>
         <?php else: ?>
@@ -113,6 +116,30 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     </div>
 </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cozinhaIdDisplay = document.getElementById("cozinha-id-display");
+        const hiddenCozinhaId = document.getElementById("hidden-cozinha-id");
+
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener("shown.bs.tab", function (event) {
+                const cozinhaId = event.target.getAttribute("data-cozinha-id");
+
+                if (cozinhaId) {
+                    cozinhaIdDisplay.textContent = cozinhaId;
+                    hiddenCozinhaId.value = cozinhaId;
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+
 
 <style>
     .cozinha-index {
